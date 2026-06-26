@@ -4,28 +4,21 @@
     {
       "src": "api/index.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/auth/(.*)",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/expenses/(.*)",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/budgets/(.*)",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/frontend/favicon.ico"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/$1"
-    }
+    { "src": "/auth/(.*)", "dest": "api/index.py" },
+    { "src": "/expenses/(.*)", "dest": "api/index.py" },
+    { "src": "/budgets/(.*)", "dest": "api/index.py" },
+    { "src": "/", "dest": "/frontend/index.html" },
+    { "src": "/dashboard", "dest": "/frontend/dashboard.html" },
+    { "src": "/dashboard.html", "dest": "/frontend/dashboard.html" },
+    { "src": "/index.html", "dest": "/frontend/index.html" },
+    { "src": "/favicon.ico", "dest": "/frontend/favicon.ico" },
+    { "src": "/(.*)", "dest": "/frontend/$1" }
   ]
 }
