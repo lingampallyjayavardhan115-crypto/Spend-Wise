@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpendWise – Dashboard</title>
+  <title>SpendWise â€“ Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
@@ -18,10 +18,10 @@
     }
     body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;overflow-x:hidden;}
 
-    /* ── BG CANVAS ── */
+    /* â”€â”€ BG CANVAS â”€â”€ */
     #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-    /* ── SIDEBAR ── */
+    /* â”€â”€ SIDEBAR â”€â”€ */
     .sidebar{
       width:var(--sw);background:rgba(13,13,32,.95);
       border-right:1px solid var(--bd);
@@ -91,10 +91,10 @@
     .logout{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;transition:all .2s;}
     .logout:hover{color:var(--r);transform:rotate(10deg) scale(1.2);}
 
-    /* ── MAIN ── */
+    /* â”€â”€ MAIN â”€â”€ */
     .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;position:relative;z-index:1;}
 
-    /* ── TOPBAR ── */
+    /* â”€â”€ TOPBAR â”€â”€ */
     .topbar{
       background:rgba(13,13,32,.8);backdrop-filter:blur(20px);
       border-bottom:1px solid var(--bd);
@@ -114,12 +114,12 @@
     .month-sel:focus{border-color:var(--p);box-shadow:0 0 0 2px rgba(124,58,237,.2);}
     .month-sel option{background:#0d0d20;}
 
-    /* ── PAGES ── */
+    /* â”€â”€ PAGES â”€â”€ */
     .page{display:none;padding:26px;flex:1;animation:pageIn .4s ease;}
     .page.active{display:block;}
     @keyframes pageIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-    /* ── STAT CARDS ── */
+    /* â”€â”€ STAT CARDS â”€â”€ */
     .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;}
     .scard{
       background:rgba(13,13,32,.8);border:1px solid var(--bd);border-radius:18px;
@@ -148,7 +148,7 @@
     .sval{font-size:24px;font-weight:900;color:var(--txt);transition:all .5s;}
     .ssub{font-size:11px;color:var(--muted);margin-top:4px;}
 
-    /* ── CHARTS ROW ── */
+    /* â”€â”€ CHARTS ROW â”€â”€ */
     .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;}
     .ccard{
       background:rgba(13,13,32,.8);border:1px solid var(--bd);border-radius:18px;
@@ -161,7 +161,7 @@
     }
     .cwrap{position:relative;height:210px;}
 
-    /* ── EXPENSE ROWS ── */
+    /* â”€â”€ EXPENSE ROWS â”€â”€ */
     .sec-card{
       background:rgba(13,13,32,.8);border:1px solid var(--bd);border-radius:18px;
       padding:20px;margin-bottom:16px;
@@ -195,7 +195,7 @@
       padding:4px;border-radius:8px;transition:all .2s;}
     .del-btn:hover{color:var(--r);background:rgba(239,68,68,.1);transform:scale(1.2);}
 
-    /* ── BUDGET PROGRESS ── */
+    /* â”€â”€ BUDGET PROGRESS â”€â”€ */
     .brow{margin-bottom:18px;animation:slideIn .4s ease;}
     @keyframes slideIn{from{opacity:0;transform:translateX(-10px);}to{opacity:1;transform:translateX(0);}}
     .bhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
@@ -221,7 +221,7 @@
     .badge-over{background:rgba(239,68,68,.15);color:var(--r);border:1px solid rgba(239,68,68,.3);}
     .badge-ok{background:rgba(16,185,129,.15);color:var(--g);border:1px solid rgba(16,185,129,.3);}
 
-    /* ── FORM ── */
+    /* â”€â”€ FORM â”€â”€ */
     .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
     .fgrp{margin-bottom:0;}
     .fgrp.full{grid-column:1/-1;}
@@ -248,13 +248,13 @@
     @keyframes btnShimmer{to{background-position:200% center;}}
     .btn-sub:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(124,58,237,.5);}
 
-    /* ── EMPTY ── */
+    /* â”€â”€ EMPTY â”€â”€ */
     .empty{text-align:center;padding:48px 20px;color:var(--muted);}
     .empty-ico{font-size:52px;margin-bottom:14px;animation:bounce 2s ease-in-out infinite;}
     @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
     .empty-txt{font-size:15px;font-weight:500;}
 
-    /* ── TOAST ── */
+    /* â”€â”€ TOAST â”€â”€ */
     .toast{
       position:fixed;top:20px;right:20px;z-index:9999;
       padding:14px 20px;border-radius:14px;font-size:14px;font-weight:700;color:#fff;
@@ -267,7 +267,7 @@
     .toast.error{background:linear-gradient(135deg,rgba(239,68,68,.95),rgba(220,38,38,.95));border:1px solid rgba(239,68,68,.3);}
     .toast.warn{background:linear-gradient(135deg,rgba(245,158,11,.95),rgba(217,119,6,.95));border:1px solid rgba(245,158,11,.3);}
 
-    /* ── NUMBER COUNTER ANIMATION ── */
+    /* â”€â”€ NUMBER COUNTER ANIMATION â”€â”€ */
     @keyframes countUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
   </style>
 </head>
@@ -278,22 +278,22 @@
 <!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="sb-logo">
-    <div class="sb-icon">💎</div>
+    <div class="sb-icon">ðŸ’Ž</div>
     <div class="sb-brand">SpendWise</div>
   </div>
   <div class="sb-section">
     <div class="sb-label">Navigation</div>
-    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">📊</span>Dashboard</div>
-    <div class="nav-item" onclick="showPage('expenses')"><span class="nav-icon">💸</span>Expenses</div>
-    <div class="nav-item" onclick="showPage('budgets')"><span class="nav-icon">🎯</span>Budgets</div>
-    <div class="nav-item" onclick="showPage('addExpense')"><span class="nav-icon">➕</span>Add Expense</div>
-    <div class="nav-item" onclick="showPage('setBudget')"><span class="nav-icon">📝</span>Set Budget</div>
+    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">ðŸ“Š</span>Dashboard</div>
+    <div class="nav-item" onclick="showPage('expenses')"><span class="nav-icon">ðŸ’¸</span>Expenses</div>
+    <div class="nav-item" onclick="showPage('budgets')"><span class="nav-icon">ðŸŽ¯</span>Budgets</div>
+    <div class="nav-item" onclick="showPage('addExpense')"><span class="nav-icon">âž•</span>Add Expense</div>
+    <div class="nav-item" onclick="showPage('setBudget')"><span class="nav-icon">ðŸ“</span>Set Budget</div>
   </div>
   <div class="sb-footer">
     <div class="user-card">
       <div class="avatar" id="userAvatar">U</div>
-      <div><div class="uname" id="sbUsername">User</div><div class="urole">✦ Personal Account</div></div>
-      <button class="logout" onclick="logout()" title="Logout">🚪</button>
+      <div><div class="uname" id="sbUsername">User</div><div class="urole">âœ¦ Personal Account</div></div>
+      <button class="logout" onclick="logout()" title="Logout">ðŸšª</button>
     </div>
   </div>
 </nav>
@@ -301,28 +301,28 @@
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="topTitle">📊 Dashboard</div>
+    <div class="topbar-title" id="topTitle">ðŸ“Š Dashboard</div>
     <select class="month-sel" id="monthSel" onchange="onMonthChange()"></select>
   </div>
 
   <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
     <div class="stats">
-      <div class="scard"><div class="sico p">💸</div><div><div class="slabel">Total Spent</div><div class="sval" id="stTotal">₹0</div><div class="ssub">This month</div></div></div>
-      <div class="scard"><div class="sico a">🧾</div><div><div class="slabel">Transactions</div><div class="sval" id="stCount">0</div><div class="ssub">This month</div></div></div>
-      <div class="scard"><div class="sico g">🎯</div><div><div class="slabel">Budgets</div><div class="sval" id="stBudgets">0</div><div class="ssub">Active</div></div></div>
-      <div class="scard"><div class="sico y">⚠️</div><div><div class="slabel">Over Budget</div><div class="sval" id="stOver">0</div><div class="ssub">Categories</div></div></div>
+      <div class="scard"><div class="sico p">ðŸ’¸</div><div><div class="slabel">Total Spent</div><div class="sval" id="stTotal">â‚¹0</div><div class="ssub">This month</div></div></div>
+      <div class="scard"><div class="sico a">ðŸ§¾</div><div><div class="slabel">Transactions</div><div class="sval" id="stCount">0</div><div class="ssub">This month</div></div></div>
+      <div class="scard"><div class="sico g">ðŸŽ¯</div><div><div class="slabel">Budgets</div><div class="sval" id="stBudgets">0</div><div class="ssub">Active</div></div></div>
+      <div class="scard"><div class="sico y">âš ï¸</div><div><div class="slabel">Over Budget</div><div class="sval" id="stOver">0</div><div class="ssub">Categories</div></div></div>
     </div>
     <div class="charts-row">
-      <div class="ccard"><div class="ctitle">🥧 Spending Breakdown</div><div class="cwrap"><canvas id="pieChart"></canvas></div></div>
-      <div class="ccard"><div class="ctitle">📊 Budget vs Spent</div><div class="cwrap"><canvas id="barChart"></canvas></div></div>
+      <div class="ccard"><div class="ctitle">ðŸ¥§ Spending Breakdown</div><div class="cwrap"><canvas id="pieChart"></canvas></div></div>
+      <div class="ccard"><div class="ctitle">ðŸ“Š Budget vs Spent</div><div class="cwrap"><canvas id="barChart"></canvas></div></div>
     </div>
     <div class="sec-card">
       <div class="sec-hdr">
-        <div class="ctitle" style="margin:0">🕐 Recent Transactions</div>
-        <button class="see-all" onclick="showPage('expenses')">View All →</button>
+        <div class="ctitle" style="margin:0">ðŸ• Recent Transactions</div>
+        <button class="see-all" onclick="showPage('expenses')">View All â†’</button>
       </div>
-      <div id="recentList"><div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">No expenses yet this month</div></div></div>
+      <div id="recentList"><div class="empty"><div class="empty-ico">ðŸ“­</div><div class="empty-txt">No expenses yet this month</div></div></div>
     </div>
   </div>
 
@@ -330,10 +330,10 @@
   <div class="page" id="page-expenses">
     <div class="sec-card">
       <div class="sec-hdr">
-        <div class="ctitle" style="margin:0">💸 All Expenses</div>
+        <div class="ctitle" style="margin:0">ðŸ’¸ All Expenses</div>
         <button class="btn-sub" onclick="showPage('addExpense')">+ Add New</button>
       </div>
-      <div id="allExpList"><div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">No expenses found</div></div></div>
+      <div id="allExpList"><div class="empty"><div class="empty-ico">ðŸ“­</div><div class="empty-txt">No expenses found</div></div></div>
     </div>
   </div>
 
@@ -341,31 +341,31 @@
   <div class="page" id="page-budgets">
     <div class="sec-card">
       <div class="sec-hdr">
-        <div class="ctitle" style="margin:0">🎯 Budget Tracker</div>
+        <div class="ctitle" style="margin:0">ðŸŽ¯ Budget Tracker</div>
         <button class="btn-sub" onclick="showPage('setBudget')">+ Set Budget</button>
       </div>
-      <div id="budgetList"><div class="empty"><div class="empty-ico">🎯</div><div class="empty-txt">No budgets set this month</div></div></div>
+      <div id="budgetList"><div class="empty"><div class="empty-ico">ðŸŽ¯</div><div class="empty-txt">No budgets set this month</div></div></div>
     </div>
   </div>
 
   <!-- ADD EXPENSE -->
   <div class="page" id="page-addExpense">
     <div class="sec-card" style="max-width:620px">
-      <div class="ctitle">➕ Add New Expense</div>
+      <div class="ctitle">âž• Add New Expense</div>
       <div class="fgrid">
         <div class="fgrp">
           <label class="flabel">Category</label>
           <select class="fselect" id="expCat">
             <option value="">Select category</option>
-            <option>🍔 Food & Dining</option><option>🚗 Transport</option>
-            <option>🛍️ Shopping</option><option>💡 Bills & Utilities</option>
-            <option>🏥 Health</option><option>🎬 Entertainment</option>
-            <option>📚 Education</option><option>✈️ Travel</option>
-            <option>🏠 Housing</option><option>📦 Other</option>
+            <option>ðŸ” Food & Dining</option><option>ðŸš— Transport</option>
+            <option>ðŸ›ï¸ Shopping</option><option>ðŸ’¡ Bills & Utilities</option>
+            <option>ðŸ¥ Health</option><option>ðŸŽ¬ Entertainment</option>
+            <option>ðŸ“š Education</option><option>âœˆï¸ Travel</option>
+            <option>ðŸ  Housing</option><option>ðŸ“¦ Other</option>
           </select>
         </div>
         <div class="fgrp">
-          <label class="flabel">Amount (₹)</label>
+          <label class="flabel">Amount (â‚¹)</label>
           <input class="finput" type="number" id="expAmt" placeholder="0.00" min="0" step="0.01">
         </div>
         <div class="fgrp">
@@ -377,7 +377,7 @@
           <input class="finput" type="text" id="expDesc" placeholder="Optional note">
         </div>
         <div class="fgrp full" style="margin-top:8px">
-          <button class="btn-sub" onclick="submitExpense()">✦ Add Expense</button>
+          <button class="btn-sub" onclick="submitExpense()">âœ¦ Add Expense</button>
         </div>
       </div>
     </div>
@@ -386,21 +386,21 @@
   <!-- SET BUDGET -->
   <div class="page" id="page-setBudget">
     <div class="sec-card" style="max-width:620px">
-      <div class="ctitle">📝 Set Monthly Budget</div>
+      <div class="ctitle">ðŸ“ Set Monthly Budget</div>
       <div class="fgrid">
         <div class="fgrp">
           <label class="flabel">Category</label>
           <select class="fselect" id="budCat">
             <option value="">Select category</option>
-            <option>🍔 Food & Dining</option><option>🚗 Transport</option>
-            <option>🛍️ Shopping</option><option>💡 Bills & Utilities</option>
-            <option>🏥 Health</option><option>🎬 Entertainment</option>
-            <option>📚 Education</option><option>✈️ Travel</option>
-            <option>🏠 Housing</option><option>📦 Other</option>
+            <option>ðŸ” Food & Dining</option><option>ðŸš— Transport</option>
+            <option>ðŸ›ï¸ Shopping</option><option>ðŸ’¡ Bills & Utilities</option>
+            <option>ðŸ¥ Health</option><option>ðŸŽ¬ Entertainment</option>
+            <option>ðŸ“š Education</option><option>âœˆï¸ Travel</option>
+            <option>ðŸ  Housing</option><option>ðŸ“¦ Other</option>
           </select>
         </div>
         <div class="fgrp">
-          <label class="flabel">Monthly Limit (₹)</label>
+          <label class="flabel">Monthly Limit (â‚¹)</label>
           <input class="finput" type="number" id="budLimit" placeholder="5000" min="0">
         </div>
         <div class="fgrp">
@@ -408,7 +408,7 @@
           <input class="finput" type="month" id="budMonth">
         </div>
         <div class="fgrp full" style="margin-top:8px">
-          <button class="btn-sub" onclick="submitBudget()">✦ Set Budget</button>
+          <button class="btn-sub" onclick="submitBudget()">âœ¦ Set Budget</button>
         </div>
       </div>
     </div>
@@ -416,7 +416,7 @@
 </div>
 
 <script>
-/* ── 3D PARTICLE BG ── */
+/* â”€â”€ 3D PARTICLE BG â”€â”€ */
 const canvas=document.getElementById('bgCanvas');
 const ctx2=canvas.getContext('2d');
 let W,H,pts=[];
@@ -461,7 +461,7 @@ function drawBg(){
 }
 drawBg();
 
-/* ── APP ── */
+/* â”€â”€ APP â”€â”€ */
 const API='http://127.0.0.1:5000';
 let token=localStorage.getItem('token');
 let username=localStorage.getItem('username')||'User';
@@ -469,8 +469,8 @@ let currentMonth='';
 let pieInst=null,barInst=null;
 if(!token)window.location.href='index.html';
 
-const CCOLORS={'🍔 Food & Dining':'#f72585','🚗 Transport':'#4cc9f0','🛍️ Shopping':'#f77f00','💡 Bills & Utilities':'#7c3aed','🏥 Health':'#10b981','🎬 Entertainment':'#e040fb','📚 Education':'#00b4d8','✈️ Travel':'#ffd60a','🏠 Housing':'#ff6b6b','📦 Other':'#8888aa'};
-const CBG={'🍔 Food & Dining':'rgba(247,37,133,.15)','🚗 Transport':'rgba(76,201,240,.15)','🛍️ Shopping':'rgba(247,127,0,.15)','💡 Bills & Utilities':'rgba(124,58,237,.15)','🏥 Health':'rgba(16,185,129,.15)','🎬 Entertainment':'rgba(224,64,251,.15)','📚 Education':'rgba(0,180,216,.15)','✈️ Travel':'rgba(255,214,10,.15)','🏠 Housing':'rgba(255,107,107,.15)','📦 Other':'rgba(136,136,170,.15)'};
+const CCOLORS={'ðŸ” Food & Dining':'#f72585','ðŸš— Transport':'#4cc9f0','ðŸ›ï¸ Shopping':'#f77f00','ðŸ’¡ Bills & Utilities':'#7c3aed','ðŸ¥ Health':'#10b981','ðŸŽ¬ Entertainment':'#e040fb','ðŸ“š Education':'#00b4d8','âœˆï¸ Travel':'#ffd60a','ðŸ  Housing':'#ff6b6b','ðŸ“¦ Other':'#8888aa'};
+const CBG={'ðŸ” Food & Dining':'rgba(247,37,133,.15)','ðŸš— Transport':'rgba(76,201,240,.15)','ðŸ›ï¸ Shopping':'rgba(247,127,0,.15)','ðŸ’¡ Bills & Utilities':'rgba(124,58,237,.15)','ðŸ¥ Health':'rgba(16,185,129,.15)','ðŸŽ¬ Entertainment':'rgba(224,64,251,.15)','ðŸ“š Education':'rgba(0,180,216,.15)','âœˆï¸ Travel':'rgba(255,214,10,.15)','ðŸ  Housing':'rgba(255,107,107,.15)','ðŸ“¦ Other':'rgba(136,136,170,.15)'};
 
 function init(){
   document.getElementById('sbUsername').textContent=username;
@@ -495,12 +495,12 @@ function hdrs(){return{'Content-Type':'application/json','Authorization':`Bearer
 
 function showToast(msg,type='success'){
   const t=document.getElementById('toast');
-  t.textContent=(type==='success'?'✅ ':type==='warn'?'⚠️ ':'❌ ')+msg;
+  t.textContent=(type==='success'?'âœ… ':type==='warn'?'âš ï¸ ':'âŒ ')+msg;
   t.className=`toast ${type} show`;
   setTimeout(()=>t.classList.remove('show'),3500);
 }
 
-const PAGE_TITLES={dashboard:'📊 Dashboard',expenses:'💸 Expenses',budgets:'🎯 Budgets',addExpense:'➕ Add Expense',setBudget:'📝 Set Budget'};
+const PAGE_TITLES={dashboard:'ðŸ“Š Dashboard',expenses:'ðŸ’¸ Expenses',budgets:'ðŸŽ¯ Budgets',addExpense:'âž• Add Expense',setBudget:'ðŸ“ Set Budget'};
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -545,7 +545,7 @@ async function loadDashboard(){
     ]);
     const summary=await sumRes.json(),budgets=await budRes.json(),expenses=await expRes.json();
 
-    animateCount(document.getElementById('stTotal'),summary.total,'₹');
+    animateCount(document.getElementById('stTotal'),summary.total,'â‚¹');
     animateCount(document.getElementById('stCount'),summary.count,'',true);
     animateCount(document.getElementById('stBudgets'),budgets.length,'',true);
     animateCount(document.getElementById('stOver'),budgets.filter(b=>b.percent>100).length,'',true);
@@ -560,7 +560,7 @@ async function loadDashboard(){
         data:{labels:cats,datasets:[{data:vals,backgroundColor:cats.map(c=>CCOLORS[c]||'#7c3aed'),borderWidth:0,hoverOffset:8}]},
         options:{plugins:{legend:{labels:{color:'#9ca3af',font:{size:11,family:'Inter'},padding:12}}},cutout:'62%',animation:{animateRotate:true,duration:1000}}
       });
-    } else pieCtx.canvas.parentElement.innerHTML='<div class="empty" style="height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center"><div class="empty-ico">📊</div><div class="empty-txt">No data yet</div></div>';
+    } else pieCtx.canvas.parentElement.innerHTML='<div class="empty" style="height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center"><div class="empty-ico">ðŸ“Š</div><div class="empty-txt">No data yet</div></div>';
 
     // Bar
     if(barInst)barInst.destroy();
@@ -589,7 +589,7 @@ async function loadDashboard(){
     const recent=expenses.slice(0,5);
     document.getElementById('recentList').innerHTML=recent.length
       ?recent.map(eRow).join('')
-      :'<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">No expenses yet this month</div></div>';
+      :'<div class="empty"><div class="empty-ico">ðŸ“­</div><div class="empty-txt">No expenses yet this month</div></div>';
   }catch(err){showToast('Failed to load dashboard.','error');}
 }
 
@@ -600,10 +600,10 @@ function eRow(e){
     <div class="einfo">
       <div class="ecat">${e.category}</div>
       <div class="edesc">${e.description||'No description'}</div>
-      <div class="edate">📅 ${e.date}</div>
+      <div class="edate">ðŸ“… ${e.date}</div>
     </div>
-    <div class="eamt">-₹${Number(e.amount).toLocaleString('en-IN')}</div>
-    <button class="del-btn" onclick="deleteExpense(${e.id})">🗑️</button>
+    <div class="eamt">-â‚¹${Number(e.amount).toLocaleString('en-IN')}</div>
+    <button class="del-btn" onclick="deleteExpense(${e.id})">ðŸ—‘ï¸</button>
   </div>`;
 }
 
@@ -613,7 +613,7 @@ async function loadAllExpenses(){
     const data=await res.json();
     document.getElementById('allExpList').innerHTML=data.length
       ?data.map(eRow).join('')
-      :'<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">No expenses found for this month</div></div>';
+      :'<div class="empty"><div class="empty-ico">ðŸ“­</div><div class="empty-txt">No expenses found for this month</div></div>';
   }catch{showToast('Failed to load expenses.','error');}
 }
 
@@ -622,19 +622,19 @@ async function loadBudgets(){
     const res=await fetch(`${API}/budgets/list?month=${currentMonth}`,{headers:hdrs()});
     const data=await res.json();
     if(!data.length){
-      document.getElementById('budgetList').innerHTML='<div class="empty"><div class="empty-ico">🎯</div><div class="empty-txt">No budgets set for this month</div></div>';
+      document.getElementById('budgetList').innerHTML='<div class="empty"><div class="empty-ico">ðŸŽ¯</div><div class="empty-txt">No budgets set for this month</div></div>';
       return;
     }
     document.getElementById('budgetList').innerHTML=data.map(b=>{
       const cls=b.percent>=100?'danger':b.percent>=80?'warn':'safe';
-      const badge=b.percent>100?`<span class="badge badge-over">⚠️ Over!</span>`:`<span class="badge badge-ok">✓ On Track</span>`;
+      const badge=b.percent>100?`<span class="badge badge-over">âš ï¸ Over!</span>`:`<span class="badge badge-ok">âœ“ On Track</span>`;
       return `<div class="brow">
         <div class="bhdr">
           <div class="bcat">${b.category} ${badge}</div>
           <div style="display:flex;align-items:center;gap:12px">
-            <div class="bamts">₹${b.spent.toLocaleString('en-IN')} / ₹${b.limit.toLocaleString('en-IN')}</div>
+            <div class="bamts">â‚¹${b.spent.toLocaleString('en-IN')} / â‚¹${b.limit.toLocaleString('en-IN')}</div>
             <div class="bpct ${cls}">${b.percent}%</div>
-            <button class="del-btn" onclick="deleteBudget(${b.id})">🗑️</button>
+            <button class="del-btn" onclick="deleteBudget(${b.id})">ðŸ—‘ï¸</button>
           </div>
         </div>
         <div class="pbar"><div class="pfill ${cls}" style="width:${Math.min(b.percent,100)}%"></div></div>
@@ -653,7 +653,7 @@ async function submitExpense(){
     const res=await fetch(`${API}/expenses/add`,{method:'POST',headers:hdrs(),body:JSON.stringify({category:cat,amount:parseFloat(amt),date,description:desc})});
     const data=await res.json();
     if(res.ok){
-      showToast('Expense added! 🎉');
+      showToast('Expense added! ðŸŽ‰');
       document.getElementById('expAmt').value='';
       document.getElementById('expDesc').value='';
       document.getElementById('expCat').value='';
@@ -671,7 +671,7 @@ async function submitBudget(){
     const res=await fetch(`${API}/budgets/set`,{method:'POST',headers:hdrs(),body:JSON.stringify({category:cat,limit:parseFloat(limit),month})});
     const data=await res.json();
     if(res.ok){
-      showToast(data.message+' 🎯');
+      showToast(data.message+' ðŸŽ¯');
       document.getElementById('budLimit').value='';
       document.getElementById('budCat').value='';
       showPage('budgets');
@@ -708,3 +708,4 @@ init();
 </script>
 </body>
 </html>
+

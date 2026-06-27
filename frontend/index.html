@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpendWise – Smart Money Manager</title>
+  <title>SpendWise â€“ Smart Money Manager</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
@@ -19,10 +19,10 @@
       overflow:hidden;position:relative;
     }
 
-    /* ── 3-D CANVAS BACKGROUND ── */
+    /* â”€â”€ 3-D CANVAS BACKGROUND â”€â”€ */
     #bgCanvas{position:fixed;inset:0;z-index:0;}
 
-    /* ── FLOATING COINS ── */
+    /* â”€â”€ FLOATING COINS â”€â”€ */
     .coin{
       position:fixed;pointer-events:none;z-index:1;
       font-size:22px;opacity:0;
@@ -35,13 +35,13 @@
       100%{transform:translateY(-10vh) rotate(720deg);opacity:0;}
     }
 
-    /* ── MAIN CARD ── */
+    /* â”€â”€ MAIN CARD â”€â”€ */
     .wrap{
       position:relative;z-index:10;
       width:100%;max-width:460px;padding:20px;
     }
 
-    /* ── LOGO ── */
+    /* â”€â”€ LOGO â”€â”€ */
     .logo-area{text-align:center;margin-bottom:30px;}
     .logo-3d{
       display:inline-block;
@@ -95,7 +95,7 @@
       color:#6b7280;font-size:13px;font-weight:500;margin-top:4px;letter-spacing:2px;text-transform:uppercase;
     }
 
-    /* ── GLASS CARD ── */
+    /* â”€â”€ GLASS CARD â”€â”€ */
     .card{
       background:rgba(255,255,255,.04);
       backdrop-filter:blur(24px);
@@ -110,7 +110,7 @@
       to{opacity:1;transform:translateY(0) scale(1);}
     }
 
-    /* ── TABS ── */
+    /* â”€â”€ TABS â”€â”€ */
     .tabs{
       display:flex;background:rgba(255,255,255,.05);
       border-radius:14px;padding:4px;margin-bottom:28px;gap:4px;
@@ -130,7 +130,7 @@
     .tab.active{color:#fff;box-shadow:0 4px 20px rgba(124,58,237,.5);}
     .tab span{position:relative;z-index:1;}
 
-    /* ── FORM ── */
+    /* â”€â”€ FORM â”€â”€ */
     .section{display:none;animation:fadeIn .3s ease;}
     .section.active{display:block;}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
@@ -160,7 +160,7 @@
       transform:translateY(-1px);
     }
 
-    /* ── BUTTON ── */
+    /* â”€â”€ BUTTON â”€â”€ */
     .btn{
       width:100%;padding:15px;border:none;border-radius:14px;
       color:#fff;font-size:15px;font-weight:800;cursor:pointer;
@@ -186,7 +186,7 @@
     }
     @keyframes ripple{to{transform:scale(4);opacity:0;}}
 
-    /* ── TOAST ── */
+    /* â”€â”€ TOAST â”€â”€ */
     .toast{
       position:fixed;top:20px;right:20px;z-index:9999;
       padding:14px 20px;border-radius:14px;
@@ -200,7 +200,7 @@
     .toast.success{background:linear-gradient(135deg,rgba(16,185,129,.9),rgba(5,150,105,.9));border:1px solid rgba(16,185,129,.3);}
     .toast.error{background:linear-gradient(135deg,rgba(239,68,68,.9),rgba(220,38,38,.9));border:1px solid rgba(239,68,68,.3);}
 
-    /* ── FEATURES ── */
+    /* â”€â”€ FEATURES â”€â”€ */
     .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px;}
     .feat{
       text-align:center;padding:14px 8px;
@@ -217,7 +217,7 @@
     .feat-ico{font-size:22px;margin-bottom:6px;}
     .feat-txt{color:#6b7280;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
 
-    /* ── DIVIDER ── */
+    /* â”€â”€ DIVIDER â”€â”€ */
     .divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
     .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08);}
     .divider span{color:#4b5563;font-size:12px;}
@@ -230,74 +230,74 @@
 <div class="wrap">
   <div class="logo-area">
     <div class="logo-3d">
-      <div class="logo-hex">💎</div>
+      <div class="logo-hex">ðŸ’Ž</div>
       <div class="logo-ring"></div>
       <div class="logo-ring2"></div>
     </div>
     <div class="brand-name">SpendWise</div>
-    <div class="brand-tag">✦ Smart Money Manager ✦</div>
+    <div class="brand-tag">âœ¦ Smart Money Manager âœ¦</div>
   </div>
 
   <div class="card">
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('login')"><span>🔑 Login</span></button>
-      <button class="tab" onclick="switchTab('signup')"><span>🚀 Sign Up</span></button>
+      <button class="tab active" onclick="switchTab('login')"><span>ðŸ”‘ Login</span></button>
+      <button class="tab" onclick="switchTab('signup')"><span>ðŸš€ Sign Up</span></button>
     </div>
 
     <div class="section active" id="loginSec">
       <div class="fgroup">
         <label class="flabel">Username</label>
         <div class="finput-wrap">
-          <span class="ficon">👤</span>
+          <span class="ficon">ðŸ‘¤</span>
           <input class="finput" type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username">
         </div>
       </div>
       <div class="fgroup">
         <label class="flabel">Password</label>
         <div class="finput-wrap">
-          <span class="ficon">🔒</span>
+          <span class="ficon">ðŸ”’</span>
           <input class="finput" type="password" id="loginPassword" placeholder="Enter your password">
         </div>
       </div>
-      <button class="btn" id="loginBtn" onclick="handleLogin(event)">Login to SpendWise →</button>
+      <button class="btn" id="loginBtn" onclick="handleLogin(event)">Login to SpendWise â†’</button>
     </div>
 
     <div class="section" id="signupSec">
       <div class="fgroup">
         <label class="flabel">Username</label>
         <div class="finput-wrap">
-          <span class="ficon">👤</span>
+          <span class="ficon">ðŸ‘¤</span>
           <input class="finput" type="text" id="signupUsername" placeholder="Choose a username">
         </div>
       </div>
       <div class="fgroup">
         <label class="flabel">Email (optional)</label>
         <div class="finput-wrap">
-          <span class="ficon">📧</span>
+          <span class="ficon">ðŸ“§</span>
           <input class="finput" type="email" id="signupEmail" placeholder="your@email.com">
         </div>
       </div>
       <div class="fgroup">
         <label class="flabel">Password</label>
         <div class="finput-wrap">
-          <span class="ficon">🔒</span>
+          <span class="ficon">ðŸ”’</span>
           <input class="finput" type="password" id="signupPassword" placeholder="Min. 6 characters">
         </div>
       </div>
-      <button class="btn" id="signupBtn" onclick="handleSignup(event)">Create My Account →</button>
+      <button class="btn" id="signupBtn" onclick="handleSignup(event)">Create My Account â†’</button>
     </div>
   </div>
 
   <div class="feats">
-    <div class="feat"><div class="feat-ico">📊</div><div class="feat-txt">Charts</div></div>
-    <div class="feat"><div class="feat-ico">🎯</div><div class="feat-txt">Budgets</div></div>
-    <div class="feat"><div class="feat-ico">🔔</div><div class="feat-txt">Alerts</div></div>
-    <div class="feat"><div class="feat-ico">⚡</div><div class="feat-txt">Instant</div></div>
+    <div class="feat"><div class="feat-ico">ðŸ“Š</div><div class="feat-txt">Charts</div></div>
+    <div class="feat"><div class="feat-ico">ðŸŽ¯</div><div class="feat-txt">Budgets</div></div>
+    <div class="feat"><div class="feat-ico">ðŸ””</div><div class="feat-txt">Alerts</div></div>
+    <div class="feat"><div class="feat-ico">âš¡</div><div class="feat-txt">Instant</div></div>
   </div>
 </div>
 
 <script>
-/* ── 3D PARTICLE CANVAS ── */
+/* â”€â”€ 3D PARTICLE CANVAS â”€â”€ */
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 let W, H, particles = [], lines = [];
@@ -379,8 +379,8 @@ function animateCanvas(){
 }
 animateCanvas();
 
-/* ── FLOATING COINS ── */
-const coinEmojis=['💰','💵','💎','🪙','💳','📈','🏦','💹'];
+/* â”€â”€ FLOATING COINS â”€â”€ */
+const coinEmojis=['ðŸ’°','ðŸ’µ','ðŸ’Ž','ðŸª™','ðŸ’³','ðŸ“ˆ','ðŸ¦','ðŸ’¹'];
 function spawnCoin(){
   const el=document.createElement('div');
   el.className='coin';
@@ -395,7 +395,7 @@ function spawnCoin(){
 for(let i=0;i<14;i++) setTimeout(spawnCoin,i*400);
 setInterval(spawnCoin,2500);
 
-/* ── APP LOGIC ── */
+/* â”€â”€ APP LOGIC â”€â”€ */
 const API='http://127.0.0.1:5000';
 
 function switchTab(t){
@@ -406,7 +406,7 @@ function switchTab(t){
 
 function showToast(msg,type='success'){
   const el=document.getElementById('toast');
-  el.textContent=(type==='success'?'✅ ':'❌ ')+msg;
+  el.textContent=(type==='success'?'âœ… ':'âŒ ')+msg;
   el.className=`toast ${type} show`;
   setTimeout(()=>el.classList.remove('show'),3500);
 }
@@ -435,11 +435,11 @@ async function handleLogin(e){
       localStorage.setItem('token',data.token);
       localStorage.setItem('user_id',data.user_id);
       localStorage.setItem('username',data.username);
-      showToast('Welcome back, '+data.username+'! 🎉');
+      showToast('Welcome back, '+data.username+'! ðŸŽ‰');
       setTimeout(()=>window.location.href='dashboard.html',900);
     }else showToast(data.message||'Login failed.','error');
   }catch{showToast('Cannot connect to server. Is Flask running?','error');}
-  btn.disabled=false; btn.textContent='Login to SpendWise →';
+  btn.disabled=false; btn.textContent='Login to SpendWise â†’';
 }
 
 async function handleSignup(e){
@@ -453,10 +453,10 @@ async function handleSignup(e){
   try{
     const res=await fetch(`${API}/auth/signup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password})});
     const data=await res.json();
-    if(res.ok){showToast('Account created! Please log in. 🎊');setTimeout(()=>switchTab('login'),1200);}
+    if(res.ok){showToast('Account created! Please log in. ðŸŽŠ');setTimeout(()=>switchTab('login'),1200);}
     else showToast(data.message||'Signup failed.','error');
   }catch{showToast('Cannot connect to server.','error');}
-  btn.disabled=false; btn.textContent='Create My Account →';
+  btn.disabled=false; btn.textContent='Create My Account â†’';
 }
 
 document.addEventListener('keydown',e=>{
@@ -470,3 +470,4 @@ if(localStorage.getItem('token')) window.location.href='dashboard.html';
 </script>
 </body>
 </html>
+
