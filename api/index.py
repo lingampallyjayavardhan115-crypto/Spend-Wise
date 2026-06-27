@@ -20,8 +20,7 @@ def after_request(response):
     return response
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, '..', 'spendwise.db')
-DB_PATH = os.path.abspath(DB_PATH)
+DB_PATH = '/tmp/spendwise.db' if os.path.exists('/tmp') else os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'spendwise.db'))
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'spendwise_secret_2024')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH
@@ -233,3 +232,4 @@ def delete_budget(user_id, bid):
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+
