@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#05050f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>SpendWise – Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    :root{--bg:#05050f;--s1:#0d0d20;--bd:rgba(255,255,255,.07);--txt:#e8e8f5;--muted:#6b7280;--p:#7c3aed;--a:#f72585;--c:#4cc9f0;--g:#10b981;--y:#f59e0b;--r:#ef4444;--sw:220px;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;}
+    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+    /* ── MOBILE BOTTOM NAV ── */
+    .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(13,13,32,.97);border-top:1px solid var(--bd);padding:8px 4px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(20px);}
+    .bn-items{display:flex;justify-content:space-around;}
+    .bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border:none;background:transparent;color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;border-radius:10px;transition:all .2s;font-family:'Inter',sans-serif;touch-action:manipulation;}
+    .bn-item.active{color:var(--p);}
+    .bn-item .bni{font-size:22px;}
+    .bn-fab{position:fixed;bottom:calc(70px + env(safe-area-inset-bottom));right:20px;z-index:201;width:52px;height:52px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--p),var(--a));color:#fff;font-size:26px;cursor:pointer;box-shadow:0 8px 25px rgba(124,58,237,.6);display:none;align-items:center;justify-content:center;touch-action:manipulation;}
+
+    /* ── DESKTOP SIDEBAR ── */
+    .sidebar{width:var(--sw);background:rgba(13,13,32,.95);border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;backdrop-filter:blur(20px);}
+    .sb-logo{padding:20px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;}
+    .sb-icon{width:42px;height:42px;flex-shrink:0;background:linear-gradient(135deg,var(--p),var(--a),var(--c));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-size:20px;animation:iconPulse 3s ease-in-out infinite;}
+    @keyframes iconPulse{0%,100%{box-shadow:0 0 20px rgba(124,58,237,.6);}50%{box-shadow:0 0 35px rgba(247,37,133,.8);}}
+    .sb-brand{font-size:18px;font-weight:900;background:linear-gradient(135deg,#fff,#c084fc,#f72585);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .sb-section{padding:14px 8px 4px;}
+    .sb-label{font-size:9px;font-weight:800;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;padding:0 8px;margin-bottom:5px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;color:var(--muted);font-size:13px;font-weight:600;transition:all .2s;margin-bottom:2px;position:relative;overflow:hidden;}
+    .nav-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--p),var(--a));border-radius:0 3px 3px 0;transform:scaleY(0);transition:transform .25s;}
+    .nav-item:hover{background:rgba(124,58,237,.1);color:var(--txt);}
+    .nav-item.active{background:rgba(124,58,237,.15);color:var(--p);}
+    .nav-item.active::before{transform:scaleY(1);}
+    .nav-icon{font-size:17px;width:20px;text-align:center;}
+    .sb-footer{margin-top:auto;padding:12px 8px;border-top:1px solid var(--bd);}
+    .user-card{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--bd);}
+    .avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--p),var(--a));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;animation:avatarGlow 3s ease-in-out infinite;}
+    @keyframes avatarGlow{0%,100%{box-shadow:0 0 12px rgba(124,58,237,.5);}50%{box-shadow:0 0 22px rgba(247,37,133,.6);}}
+    .uname{font-size:12px;font-weight:700;}.urole{font-size:10px;color:var(--muted);}
+    .logout{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;transition:all .2s;padding:4px;}
+    .logout:hover{color:var(--r);}
+
+    /* ── MAIN ── */
+    .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;position:relative;z-index:1;min-height:100vh;}
+    .topbar{background:rgba(13,13,32,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+    .topbar-title{font-size:17px;font-weight:800;background:linear-gradient(135deg,var(--txt),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .month-sel{background:rgba(255,255,255,.07);border:1px solid var(--bd);color:var(--txt);border-radius:10px;padding:7px 12px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;outline:none;}
+    .month-sel option{background:#0d0d20;}
+
+    /* ── PAGES ── */
+    .page{display:none;padding:22px;animation:pageIn .3s ease;}
+    .page.active{display:block;}
+    @keyframes pageIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+    /* ── STAT CARDS ── */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+    .scard{background:rgba(13,13,32,.8);border:1px solid var(--bd);border-radius:16px;padding:16px;display:flex;align-items:flex-start;gap:12px;transition:all .3s;cursor:default;}
+    .scard:hover{transform:translateY(-3px);border-color:rgba(124,58,237,.3);box-shadow:0 15px 35px rgba(0,0,0,.4);}
+    .sico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .sico.p{background:rgba(124,58,237,.2);}.sico.a{background:rgba(247,37,133,.2);}.sico.g{background:rgba(16,185,129,.2);}.sico.y{background:rgba(245,158,11,.2);}
+    .slabel{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+    .sval{font-size:20px;font-weight:900;color:var(--txt);}
+    .ssub{font-size:10px;color:var(--muted);margin-top:3px;}
+
+    /* ── CHARTS ── */
+    .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+    .ccard{background:rgba(13,13,32,.8);border:1px solid var(--bd);border-radius:16px;padding:18px;transition:all .3s;}
+    .ccard:hover{border-color:rgba(124,58,237,.3);}
+    .ctitle{font-size:13px;font-weight:800;margin-bottom:14px;background:linear-gradient(135deg,var(--txt),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .cwrap{position:relative;height:200px;}
+
+    /* ── SECTION CARD ── */
+    .sec-card{background:rgba(13,13,32,.8);border:1px solid var(--bd);border-radius:16px;padding:18px;margin-bottom:14px;}
+    .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .see-all{font-size:12px;color:var(--p);cursor:pointer;font-weight:700;background:none;border:none;transition:all .2s;font-family:'Inter',sans-serif;}
+
+    /* ── EXPENSE ROW ── */
+    .erow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd);transition:all .2s;}
+    .erow:last-child{border-bottom:none;}
+    .erow:hover{transform:translateX(3px);}
+    .eico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:transform .2s;}
+    .erow:hover .eico{transform:scale(1.1) rotate(-5deg);}
+    .einfo{flex:1;min-width:0;}
+    .ecat{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .edesc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .edate{font-size:10px;color:var(--muted);}
+    .eamt{font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--a),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+    .del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px;border-radius:8px;transition:all .2s;touch-action:manipulation;}
+    .del-btn:hover,.del-btn:active{color:var(--r);background:rgba(239,68,68,.1);}
+
+    /* ── BUDGET ── */
+    .brow{margin-bottom:16px;}
+    .bhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px;}
+    .bcat{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+    .bamts{font-size:11px;color:var(--muted);}
+    .pbar{height:9px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden;}
+    .pfill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;}
+    .pfill::after{content:'';position:absolute;top:0;left:-100%;width:200%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shine 2s infinite;}
+    @keyframes shine{to{left:100%;}}
+    .pfill.safe{background:linear-gradient(90deg,#10b981,#34d399);}.pfill.warn{background:linear-gradient(90deg,#f59e0b,#fbbf24);}.pfill.danger{background:linear-gradient(90deg,#ef4444,#f87171);}
+    .bpct{font-size:11px;font-weight:800;}.bpct.safe{color:var(--g);}.bpct.warn{color:var(--y);}.bpct.danger{color:var(--r);}
+    .badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:800;}
+    .badge-over{background:rgba(239,68,68,.15);color:var(--r);border:1px solid rgba(239,68,68,.3);}
+    .badge-ok{background:rgba(16,185,129,.15);color:var(--g);border:1px solid rgba(16,185,129,.3);}
+
+    /* ── FORM ── */
+    .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .fgrp{}.fgrp.full{grid-column:1/-1;}
+    .flabel{display:block;font-size:11px;color:var(--p);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+    .finput,.fselect{width:100%;padding:12px 14px;background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:11px;color:var(--txt);font-size:16px;font-family:'Inter',sans-serif;outline:none;transition:all .25s;-webkit-appearance:none;}
+    .finput:focus,.fselect:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(124,58,237,.15);background:rgba(124,58,237,.07);}
+    .finput::placeholder{color:#4b5563;}.fselect option{background:#0d0d20;}
+    .btn-sub{padding:13px 24px;border:none;border-radius:11px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--p),var(--a),var(--c));background-size:200% auto;animation:btnShimmer 3s linear infinite;transition:transform .2s;font-family:'Inter',sans-serif;touch-action:manipulation;}
+    @keyframes btnShimmer{to{background-position:200% center;}}
+    .btn-sub:hover{transform:translateY(-2px);}
+    .btn-sub:active{transform:scale(.97);}
+
+    /* ── EMPTY ── */
+    .empty{text-align:center;padding:40px 20px;color:var(--muted);}
+    .empty-ico{font-size:44px;margin-bottom:12px;animation:bounce 2s ease-in-out infinite;}
+    @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+    .empty-txt{font-size:14px;font-weight:500;}
+
+    /* ── TOAST ── */
+    .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:9999;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:700;color:#fff;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:8px;box-shadow:0 10px 40px rgba(0,0,0,.4);max-width:90vw;text-align:center;}
+    .toast.show{transform:translateX(-50%) translateY(0);}
+    .toast.success{background:linear-gradient(135deg,rgba(16,185,129,.95),rgba(5,150,105,.95));}
+    .toast.error{background:linear-gradient(135deg,rgba(239,68,68,.95),rgba(220,38,38,.95));}
+    .toast.warn{background:linear-gradient(135deg,rgba(245,158,11,.95),rgba(217,119,6,.95));}
+
+    /* ── MOBILE RESPONSIVE ── */
+    @media(max-width:768px){
+      .sidebar{display:none;}
+      .main{margin-left:0;padding-bottom:calc(70px + env(safe-area-inset-bottom));}
+      .bottom-nav{display:block;}
+      .bn-fab{display:flex;}
+      .stats{grid-template-columns:repeat(2,1fr);}
+      .charts-row{grid-template-columns:1fr;}
+      .fgrid{grid-template-columns:1fr;}
+      .fgrp.full{grid-column:1;}
+      .topbar{padding:12px 16px;}
+      .page{padding:14px;}
+      .scard{padding:13px;}
+      .sval{font-size:18px;}
+    }
+    @media(max-width:400px){
+      .stats{grid-template-columns:1fr 1fr;}
+      .sval{font-size:16px;}
+      .bn-item{padding:5px 8px;font-size:9px;}
+    }
+  </style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="toast" id="toast"></div>
+
+<!-- DESKTOP SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-logo"><div class="sb-icon">💎</div><div class="sb-brand">SpendWise</div></div>
+  <div class="sb-section">
+    <div class="sb-label">Navigation</div>
+    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">📊</span>Dashboard</div>
+    <div class="nav-item" onclick="showPage('expenses')"><span class="nav-icon">💸</span>Expenses</div>
+    <div class="nav-item" onclick="showPage('budgets')"><span class="nav-icon">🎯</span>Budgets</div>
+    <div class="nav-item" onclick="showPage('addExpense')"><span class="nav-icon">➕</span>Add Expense</div>
+    <div class="nav-item" onclick="showPage('setBudget')"><span class="nav-icon">📝</span>Set Budget</div>
+  </div>
+  <div class="sb-footer">
+    <div class="user-card">
+      <div class="avatar" id="userAvatar">U</div>
+      <div><div class="uname" id="sbUsername">User</div><div class="urole">✦ Personal</div></div>
+      <button class="logout" onclick="logout()">🚪</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="bn-items">
+    <button class="bn-item active" onclick="showPage('dashboard')"><span class="bni">📊</span>Home</button>
+    <button class="bn-item" onclick="showPage('expenses')"><span class="bni">💸</span>Expenses</button>
+    <button class="bn-item" onclick="showPage('addExpense')"><span class="bni">➕</span>Add</button>
+    <button class="bn-item" onclick="showPage('budgets')"><span class="bni">🎯</span>Budgets</button>
+    <button class="bn-item" onclick="logout()"><span class="bni">🚪</span>Logout</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topTitle">📊 Dashboard</div>
+    <select class="month-sel" id="monthSel" onchange="onMonthChange()"></select>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats">
+      <div class="scard"><div class="sico p">💸</div><div><div class="slabel">Total Spent</div><div class="sval" id="stTotal">₹0</div><div class="ssub">This month</div></div></div>
+      <div class="scard"><div class="sico a">🧾</div><div><div class="slabel">Transactions</div><div class="sval" id="stCount">0</div><div class="ssub">This month</div></div></div>
+      <div class="scard"><div class="sico g">🎯</div><div><div class="slabel">Budgets</div><div class="sval" id="stBudgets">0</div><div class="ssub">Active</div></div></div>
+      <div class="scard"><div class="sico y">⚠️</div><div><div class="slabel">Over Budget</div><div class="sval" id="stOver">0</div><div class="ssub">Categories</div></div></div>
+    </div>
+    <div class="charts-row">
+      <div class="ccard"><div class="ctitle">🥧 Spending Breakdown</div><div class="cwrap"><canvas id="pieChart"></canvas></div></div>
+      <div class="ccard"><div class="ctitle">📊 Budget vs Spent</div><div class="cwrap"><canvas id="barChart"></canvas></div></div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr"><div class="ctitle" style="margin:0">🕐 Recent Transactions</div><button class="see-all" onclick="showPage('expenses')">View All →</button></div>
+      <div id="recentList"><div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">No expenses yet</div></div></div>
+    </div>
+  </div>
+
+  <!-- EXPENSES -->
+  <div class="page" id="page-expenses">
+    <div class="sec-card">
+      <div class="sec-hdr"><div class="ctitle" style="margin:0">💸 All Expenses</div><button class="btn-sub" onclick="showPage('addExpense')">+ Add</button></div>
+      <div id="allExpList"><div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">No expenses found</div></div></div>
+    </div>
+  </div>
+
+  <!-- BUDGETS -->
+  <div class="page" id="page-budgets">
+    <div class="sec-card">
+      <div class="sec-hdr"><div class="ctitle" style="margin:0">🎯 Budget Tracker</div><button class="btn-sub" onclick="showPage('setBudget')">+ Set</button></div>
+      <div id="budgetList"><div class="empty"><div class="empty-ico">🎯</div><div class="empty-txt">No budgets set</div></div></div>
+    </div>
+  </div>
+
+  <!-- ADD EXPENSE -->
+  <div class="page" id="page-addExpense">
+    <div class="sec-card">
+      <div class="ctitle">➕ Add New Expense</div>
+      <div class="fgrid">
+        <div class="fgrp"><label class="flabel">Category</label>
+          <select class="fselect" id="expCat">
+            <option value="">Select category</option>
+            <option>🍔 Food & Dining</option><option>🚗 Transport</option>
+            <option>🛍️ Shopping</option><option>💡 Bills & Utilities</option>
+            <option>🏥 Health</option><option>🎬 Entertainment</option>
+            <option>📚 Education</option><option>✈️ Travel</option>
+            <option>🏠 Housing</option><option>📦 Other</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flabel">Amount (₹)</label><input class="finput" type="number" id="expAmt" placeholder="0.00" min="0" step="0.01" inputmode="decimal"></div>
+        <div class="fgrp"><label class="flabel">Date</label><input class="finput" type="date" id="expDate"></div>
+        <div class="fgrp"><label class="flabel">Description</label><input class="finput" type="text" id="expDesc" placeholder="Optional note"></div>
+        <div class="fgrp full" style="margin-top:6px"><button class="btn-sub" style="width:100%" onclick="submitExpense()">✦ Add Expense</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SET BUDGET -->
+  <div class="page" id="page-setBudget">
+    <div class="sec-card">
+      <div class="ctitle">📝 Set Monthly Budget</div>
+      <div class="fgrid">
+        <div class="fgrp"><label class="flabel">Category</label>
+          <select class="fselect" id="budCat">
+            <option value="">Select category</option>
+            <option>🍔 Food & Dining</option><option>🚗 Transport</option>
+            <option>🛍️ Shopping</option><option>💡 Bills & Utilities</option>
+            <option>🏥 Health</option><option>🎬 Entertainment</option>
+            <option>📚 Education</option><option>✈️ Travel</option>
+            <option>🏠 Housing</option><option>📦 Other</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flabel">Monthly Limit (₹)</label><input class="finput" type="number" id="budLimit" placeholder="5000" min="0" inputmode="decimal"></div>
+        <div class="fgrp"><label class="flabel">Month</label><input class="finput" type="month" id="budMonth"></div>
+        <div class="fgrp full" style="margin-top:6px"><button class="btn-sub" style="width:100%" onclick="submitBudget()">✦ Set Budget</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auto-detect API
+const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://127.0.0.1:5000' : '';
+
+let token=localStorage.getItem('token');
+let username=localStorage.getItem('username')||'User';
+let currentMonth='';
+let pieInst=null,barInst=null;
+if(!token)window.location.href='index.html';
+
+// BG Canvas
+const canvas=document.getElementById('bgCanvas');
+const ctx2=canvas.getContext('2d');
+let W,H,pts=[];
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
+resize();window.addEventListener('resize',resize);
+const COLS=['rgba(124,58,237,.5)','rgba(247,37,133,.4)','rgba(76,201,240,.4)','rgba(16,185,129,.3)'];
+class Dot{constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.r=Math.random()*1.5+.5;this.c=COLS[Math.floor(Math.random()*COLS.length)];this.o=Math.random()*.4+.1;}update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1;}draw(){ctx2.beginPath();ctx2.arc(this.x,this.y,this.r,0,Math.PI*2);ctx2.fillStyle=this.c;ctx2.globalAlpha=this.o;ctx2.fill();ctx2.globalAlpha=1;}}
+for(let i=0;i<80;i++)pts.push(new Dot());
+function drawBg(){ctx2.fillStyle='rgba(5,5,15,.25)';ctx2.fillRect(0,0,W,H);pts.forEach(p=>{p.update();p.draw();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<80){ctx2.beginPath();ctx2.moveTo(pts[i].x,pts[i].y);ctx2.lineTo(pts[j].x,pts[j].y);ctx2.strokeStyle=pts[i].c;ctx2.globalAlpha=(1-d/80)*.1;ctx2.lineWidth=.5;ctx2.stroke();ctx2.globalAlpha=1;}}requestAnimationFrame(drawBg);}
+drawBg();
+
+const CCOLORS={'🍔 Food & Dining':'#f72585','🚗 Transport':'#4cc9f0','🛍️ Shopping':'#f77f00','💡 Bills & Utilities':'#7c3aed','🏥 Health':'#10b981','🎬 Entertainment':'#e040fb','📚 Education':'#00b4d8','✈️ Travel':'#ffd60a','🏠 Housing':'#ff6b6b','📦 Other':'#8888aa'};
+const CBG={'🍔 Food & Dining':'rgba(247,37,133,.15)','🚗 Transport':'rgba(76,201,240,.15)','🛍️ Shopping':'rgba(247,127,0,.15)','💡 Bills & Utilities':'rgba(124,58,237,.15)','🏥 Health':'rgba(16,185,129,.15)','🎬 Entertainment':'rgba(224,64,251,.15)','📚 Education':'rgba(0,180,216,.15)','✈️ Travel':'rgba(255,214,10,.15)','🏠 Housing':'rgba(255,107,107,.15)','📦 Other':'rgba(136,136,170,.15)'};
+
+function init(){
+  document.getElementById('sbUsername').textContent=username;
+  document.getElementById('userAvatar').textContent=username[0].toUpperCase();
+  const sel=document.getElementById('monthSel');
+  const now=new Date();
+  for(let i=0;i<6;i++){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    const val=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const o=document.createElement('option');
+    o.value=val;o.textContent=d.toLocaleString('default',{month:'short',year:'numeric'});
+    if(i===0)o.selected=true;sel.appendChild(o);
+  }
+  currentMonth=sel.value;
+  document.getElementById('expDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('budMonth').value=currentMonth;
+  loadDashboard();
+}
+
+function hdrs(){return{'Content-Type':'application/json','Authorization':`Bearer ${token}`};}
+function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=(type==='success'?'✅ ':type==='warn'?'⚠️ ':'❌ ')+msg;t.className=`toast ${type} show`;setTimeout(()=>t.classList.remove('show'),3500);}
+
+const PAGE_TITLES={dashboard:'📊 Dashboard',expenses:'💸 Expenses',budgets:'🎯 Budgets',addExpense:'➕ Add Expense',setBudget:'📝 Set Budget'};
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item,.bn-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  document.getElementById('topTitle').textContent=PAGE_TITLES[name]||name;
+  const navIdx={dashboard:0,expenses:1,addExpense:2,budgets:3};
+  const desktopItems=document.querySelectorAll('.nav-item');
+  const mobileItems=document.querySelectorAll('.bn-item');
+  const dMap={dashboard:0,expenses:1,budgets:2,addExpense:3,setBudget:4};
+  if(dMap[name]!==undefined&&desktopItems[dMap[name]])desktopItems[dMap[name]].classList.add('active');
+  if(navIdx[name]!==undefined&&mobileItems[navIdx[name]])mobileItems[navIdx[name]].classList.add('active');
+  if(name==='dashboard')loadDashboard();
+  if(name==='expenses')loadAllExpenses();
+  if(name==='budgets')loadBudgets();
+  window.scrollTo(0,0);
+}
+
+function onMonthChange(){
+  currentMonth=document.getElementById('monthSel').value;
+  document.getElementById('budMonth').value=currentMonth;
+  const active=document.querySelector('.page.active').id.replace('page-','');
+  if(active==='dashboard')loadDashboard();
+  if(active==='expenses')loadAllExpenses();
+  if(active==='budgets')loadBudgets();
+}
+
+function animCount(el,target,prefix='',isInt=false){
+  const dur=700,start=performance.now();
+  function u(now){const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3),v=target*e;el.textContent=prefix+(isInt?Math.round(v):v.toLocaleString('en-IN',{maximumFractionDigits:0}));if(p<1)requestAnimationFrame(u);}
+  requestAnimationFrame(u);
+}
+
+async function loadDashboard(){
+  try{
+    const[sR,bR,eR]=await Promise.all([
+      fetch(`${API}/expenses/summary?month=${currentMonth}`,{headers:hdrs()}),
+      fetch(`${API}/budgets/list?month=${currentMonth}`,{headers:hdrs()}),
+      fetch(`${API}/expenses/list?month=${currentMonth}`,{headers:hdrs()})
+    ]);
+    const sum=await sR.json(),bud=await bR.json(),exp=await eR.json();
+    animCount(document.getElementById('stTotal'),sum.total,'₹');
+    animCount(document.getElementById('stCount'),sum.count,'',true);
+    animCount(document.getElementById('stBudgets'),bud.length,'',true);
+    animCount(document.getElementById('stOver'),bud.filter(b=>b.percent>100).length,'',true);
+    const cats=Object.keys(sum.by_category),vals=Object.values(sum.by_category);
+    if(pieInst)pieInst.destroy();
+    const pieCtx=document.getElementById('pieChart').getContext('2d');
+    if(cats.length>0){
+      pieInst=new Chart(pieCtx,{type:'doughnut',data:{labels:cats,datasets:[{data:vals,backgroundColor:cats.map(c=>CCOLORS[c]||'#7c3aed'),borderWidth:0,hoverOffset:6}]},options:{plugins:{legend:{labels:{color:'#9ca3af',font:{size:10,family:'Inter'},boxWidth:10}}},cutout:'62%',animation:{duration:900}}});
+    }
+    if(barInst)barInst.destroy();
+    const barCtx=document.getElementById('barChart').getContext('2d');
+    if(bud.length>0){
+      barInst=new Chart(barCtx,{type:'bar',data:{labels:bud.map(b=>b.category.split(' ').slice(1).join(' ')),datasets:[{label:'Budget',data:bud.map(b=>b.limit),backgroundColor:'rgba(124,58,237,.5)',borderRadius:5},{label:'Spent',data:bud.map(b=>b.spent),backgroundColor:bud.map(b=>b.percent>100?'rgba(239,68,68,.7)':'rgba(16,185,129,.7)'),borderRadius:5}]},options:{plugins:{legend:{labels:{color:'#9ca3af',font:{size:10,family:'Inter'}}}},scales:{x:{ticks:{color:'#6b7280',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#6b7280',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}}},animation:{duration:900}}});
+    }
+    document.getElementById('recentList').innerHTML=exp.length?exp.slice(0,5).map(eRow).join(''):'<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">No expenses yet this month</div></div>';
+  }catch(e){showToast('Failed to load. Check connection.','error');}
+}
+
+function eRow(e){const bg=CBG[e.category]||'rgba(124,58,237,.15)';return `<div class="erow"><div class="eico" style="background:${bg}">${e.category.split(' ')[0]}</div><div class="einfo"><div class="ecat">${e.category}</div><div class="edesc">${e.description||'No description'}</div><div class="edate">📅 ${e.date}</div></div><div class="eamt">-₹${Number(e.amount).toLocaleString('en-IN')}</div><button class="del-btn" onclick="deleteExpense(${e.id})">🗑️</button></div>`;}
+
+async function loadAllExpenses(){try{const r=await fetch(`${API}/expenses/list?month=${currentMonth}`,{headers:hdrs()});const d=await r.json();document.getElementById('allExpList').innerHTML=d.length?d.map(eRow).join(''):'<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">No expenses this month</div></div>';}catch{showToast('Failed to load.','error');}}
+
+async function loadBudgets(){
+  try{
+    const r=await fetch(`${API}/budgets/list?month=${currentMonth}`,{headers:hdrs()});
+    const d=await r.json();
+    if(!d.length){document.getElementById('budgetList').innerHTML='<div class="empty"><div class="empty-ico">🎯</div><div class="empty-txt">No budgets set</div></div>';return;}
+    document.getElementById('budgetList').innerHTML=d.map(b=>{
+      const cls=b.percent>=100?'danger':b.percent>=80?'warn':'safe';
+      const badge=b.percent>100?`<span class="badge badge-over">⚠️ Over!</span>`:`<span class="badge badge-ok">✓ OK</span>`;
+      return `<div class="brow"><div class="bhdr"><div class="bcat">${b.category} ${badge}</div><div style="display:flex;align-items:center;gap:10px"><div class="bamts">₹${b.spent.toLocaleString('en-IN')} / ₹${b.limit.toLocaleString('en-IN')}</div><div class="bpct ${cls}">${b.percent}%</div><button class="del-btn" onclick="deleteBudget(${b.id})">🗑️</button></div></div><div class="pbar"><div class="pfill ${cls}" style="width:${Math.min(b.percent,100)}%"></div></div></div>`;
+    }).join('');
+  }catch{showToast('Failed to load.','error');}
+}
+
+async function submitExpense(){const cat=document.getElementById('expCat').value,amt=document.getElementById('expAmt').value,date=document.getElementById('expDate').value,desc=document.getElementById('expDesc').value;if(!cat||!amt||!date){showToast('Fill all required fields.','error');return;}try{const r=await fetch(`${API}/expenses/add`,{method:'POST',headers:hdrs(),body:JSON.stringify({category:cat,amount:parseFloat(amt),date,description:desc})});const d=await r.json();if(r.ok){showToast('Expense added! 🎉');document.getElementById('expAmt').value='';document.getElementById('expDesc').value='';document.getElementById('expCat').value='';showPage('expenses');}else showToast(d.message||'Failed.','error');}catch{showToast('Server error.','error');}}
+
+async function submitBudget(){const cat=document.getElementById('budCat').value,limit=document.getElementById('budLimit').value,month=document.getElementById('budMonth').value;if(!cat||!limit||!month){showToast('Fill all required fields.','error');return;}try{const r=await fetch(`${API}/budgets/set`,{method:'POST',headers:hdrs(),body:JSON.stringify({category:cat,limit:parseFloat(limit),month})});const d=await r.json();if(r.ok){showToast(d.message+' 🎯');document.getElementById('budLimit').value='';document.getElementById('budCat').value='';showPage('budgets');}else showToast(d.message||'Failed.','error');}catch{showToast('Server error.','error');}}
+
+async function deleteExpense(id){if(!confirm('Delete this expense?'))return;try{const r=await fetch(`${API}/expenses/delete/${id}`,{method:'DELETE',headers:hdrs()});if(r.ok){showToast('Deleted.');const active=document.querySelector('.page.active').id.replace('page-','');if(active==='dashboard')loadDashboard();else loadAllExpenses();}}catch{showToast('Failed.','error');}}
+
+async function deleteBudget(id){if(!confirm('Delete this budget?'))return;try{const r=await fetch(`${API}/budgets/delete/${id}`,{method:'DELETE',headers:hdrs()});if(r.ok){showToast('Deleted.');loadBudgets();}}catch{showToast('Failed.','error');}}
+
+function logout(){if(!confirm('Log out?'))return;localStorage.clear();window.location.href='index.html';}
+
+init();
+</script>
+</body>
+</html>

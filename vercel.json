@@ -3,7 +3,11 @@
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.9"
+      }
     },
     {
       "src": "frontend/**",
@@ -14,6 +18,7 @@
     { "src": "/auth/(.*)", "dest": "api/index.py" },
     { "src": "/expenses/(.*)", "dest": "api/index.py" },
     { "src": "/budgets/(.*)", "dest": "api/index.py" },
+    { "src": "/api/(.*)", "dest": "api/index.py" },
     { "src": "/", "dest": "/frontend/index.html" },
     { "src": "/dashboard", "dest": "/frontend/dashboard.html" },
     { "src": "/dashboard.html", "dest": "/frontend/dashboard.html" },
