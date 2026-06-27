@@ -1,9 +1,11 @@
 ﻿{
   "version": 2,
-  "rewrites": [
-    { "source": "/auth/:path*", "destination": "/api/index.py" },
-    { "source": "/expenses/:path*", "destination": "/api/index.py" },
-    { "source": "/budgets/:path*", "destination": "/api/index.py" },
-    { "source": "/health", "destination": "/api/index.py" }
+  "builds": [
+    { "src": "frontend/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/frontend/index.html" },
+    { "src": "/dashboard.html", "dest": "/frontend/dashboard.html" },
+    { "src": "/(.*)", "dest": "/frontend/$1" }
   ]
 }
