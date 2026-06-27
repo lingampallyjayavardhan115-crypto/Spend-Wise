@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 2,
   "builds": [
     {
@@ -19,6 +19,6 @@
     { "src": "/dashboard.html", "dest": "/frontend/dashboard.html" },
     { "src": "/index.html", "dest": "/frontend/index.html" },
     { "src": "/favicon.ico", "dest": "/frontend/favicon.ico" },
-    { "src": "/(.*)", "dest": "/frontend/" }
+    { "src": "/(.*)", "dest": "/frontend/$1" }
   ]
 }
