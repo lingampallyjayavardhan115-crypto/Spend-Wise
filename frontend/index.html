@@ -1,178 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpendWise - Smart Money Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Inter,sans-serif;min-height:100vh;background:#05050f;display:flex;align-items:center;justify-content:center;}
+.wrap{width:100%;max-width:420px;padding:20px;}
+.logo{text-align:center;margin-bottom:24px;}
+.logo-box{display:inline-flex;width:72px;height:72px;background:linear-gradient(135deg,#7c3aed,#f72585);border-radius:18px;align-items:center;justify-content:center;font-size:32px;margin-bottom:10px;box-shadow:0 0 30px rgba(124,58,237,.7);}
+.brand{font-size:28px;font-weight:900;background:linear-gradient(135deg,#fff,#c084fc,#f72585);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tag{color:#6b7280;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px;}
+.tabs{display:flex;background:rgba(255,255,255,.05);border-radius:10px;padding:3px;margin-bottom:22px;gap:3px;}
+.tab{flex:1;padding:10px;border:none;background:transparent;color:#6b7280;font-size:14px;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;}
+.tab.active{background:linear-gradient(135deg,#7c3aed,#f72585);color:#fff;}
+.sec{display:none;}.sec.active{display:block;}
+.fg{margin-bottom:14px;}
+.fl{display:block;font-size:11px;font-weight:700;color:#8b5cf6;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.fi{width:100%;padding:12px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:16px;font-family:Inter,sans-serif;outline:none;}
+.fi:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.2);}
+.fi::placeholder{color:#4b5563;}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#f72585);margin-top:6px;font-family:Inter,sans-serif;}
+.btn:active{opacity:.9;}
+.btn:disabled{opacity:.5;}
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;}
+.feat{text-align:center;padding:10px 4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;}
+.fi-txt{color:#6b7280;f
+@'
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <meta name="theme-color" content="#05050f">
-  <title>SpendWise - Smart Money Manager</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-    body{font-family:'Inter',sans-serif;min-height:100vh;background:#05050f;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
-    #bgCanvas{position:fixed;inset:0;z-index:0;}
-    .wrap{position:relative;z-index:10;width:100%;max-width:440px;padding:16px;}
-    .logo-area{text-align:center;margin-bottom:24px;}
-    .logo-box{display:inline-flex;width:80px;height:80px;background:linear-gradient(135deg,#7c3aed,#f72585,#4cc9f0);border-radius:20px;align-items:center;justify-content:center;margin-bottom:12px;font-size:36px;box-shadow:0 0 40px rgba(124,58,237,.8);animation:glowPulse 2s ease-in-out infinite;}
-    @keyframes glowPulse{0%,100%{box-shadow:0 0 40px rgba(124,58,237,.8);}50%{box-shadow:0 0 70px rgba(247,37,133,.9);}}
-    .brand-name{font-size:32px;font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,#fff 0%,#c084fc 40%,#f72585 70%,#4cc9f0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .brand-tag{color:#6b7280;font-size:12px;font-weight:600;margin-top:6px;letter-spacing:3px;text-transform:uppercase;}
-    .card{background:rgba(255,255,255,.05);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:28px;box-shadow:0 25px 60px rgba(0,0,0,.5);}
-    .tabs{display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:24px;gap:4px;}
-    .tab{flex:1;padding:11px;border:none;background:transparent;color:#6b7280;font-size:14px;font-weight:700;cursor:pointer;border-radius:10px;transition:all .3s;font-family:'Inter',sans-serif;position:relative;overflow:hidden;}
-    .tab::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#7c3aed,#f72585);opacity:0;transition:opacity .3s;border-radius:10px;}
-    .tab.active::before{opacity:1;}.tab.active{color:#fff;}.tab span{position:relative;z-index:1;}
-    .section{display:none;}.section.active{display:block;}
-    .fgroup{margin-bottom:16px;}
-    .flabel{display:block;font-size:11px;font-weight:700;color:#8b5cf6;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
-    .finput{width:100%;padding:13px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;font-size:16px;font-family:'Inter',sans-serif;outline:none;transition:all .25s;-webkit-appearance:none;}
-    .finput::placeholder{color:#4b5563;}
-    .finput:focus{border-color:#7c3aed;background:rgba(124,58,237,.12);box-shadow:0 0 0 3px rgba(124,58,237,.2);}
-    .btn{width:100%;padding:15px;border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;background:linear-gradient(135deg,#7c3aed,#f72585,#4cc9f0);background-size:200% auto;animation:btnShimmer 3s linear infinite;transition:transform .2s;margin-top:6px;touch-action:manipulation;}
-    @keyframes btnShimmer{to{background-position:200% center;}}
-    .btn:active{transform:scale(.97);}
-    .btn:disabled{opacity:.5;cursor:not-allowed;animation:none;}
-    .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:9999;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:700;color:#fff;transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 40px rgba(0,0,0,.4);max-width:90vw;text-align:center;}
-    .toast.show{transform:translateX(-50%) translateY(0);}
-    .toast.success{background:linear-gradient(135deg,#10b981,#059669);}
-    .toast.error{background:linear-gradient(135deg,#ef4444,#dc2626);}
-    .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px;}
-    .feat{text-align:center;padding:12px 6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;}
-    .feat-ico{font-size:20px;margin-bottom:4px;}
-    .feat-txt{color:#6b7280;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpendWise - Smart Money Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Inter,sans-serif;min-height:100vh;background:#05050f;display:flex;align-items:center;justify-content:center;}
+.wrap{width:100%;max-width:420px;padding:20px;}
+.logo{text-align:center;margin-bottom:24px;}
+.logo-box{display:inline-flex;width:72px;height:72px;background:linear-gradient(135deg,#7c3aed,#f72585);border-radius:18px;align-items:center;justify-content:center;font-size:32px;margin-bottom:10px;box-shadow:0 0 30px rgba(124,58,237,.7);}
+.brand{font-size:28px;font-weight:900;background:linear-gradient(135deg,#fff,#c084fc,#f72585);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tag{color:#6b7280;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px;}
+.tabs{display:flex;background:rgba(255,255,255,.05);border-radius:10px;padding:3px;margin-bottom:22px;gap:3px;}
+.tab{flex:1;padding:10px;border:none;background:transparent;color:#6b7280;font-size:14px;font-weight:700;cursor:pointer;border-radius:8px;font-family:Inter,sans-serif;}
+.tab.active{background:linear-gradient(135deg,#7c3aed,#f72585);color:#fff;}
+.sec{display:none;}.sec.active{display:block;}
+.fg{margin-bottom:14px;}
+.fl{display:block;font-size:11px;font-weight:700;color:#8b5cf6;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.fi{width:100%;padding:12px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:16px;font-family:Inter,sans-serif;outline:none;}
+.fi:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.2);}
+.fi::placeholder{color:#4b5563;}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#f72585);margin-top:6px;font-family:Inter,sans-serif;}
+.btn:active{opacity:.9;}
+.btn:disabled{opacity:.5;}
+.feats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;}
+.feat{text-align:center;padding:10px 4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;}
+.fi-txt{color:#6b7280;font-size:10px;font-weight:600;text-transform:uppercase;margin-top:4px;}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:999;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:700;color:#fff;transition:transform .3s;max-width:90vw;text-align:center;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.success{background:#10b981;}
+.toast.error{background:#ef4444;}
+</style>
 </head>
 <body>
-<canvas id="bgCanvas"></canvas>
 <div class="toast" id="toast"></div>
 <div class="wrap">
-  <div class="logo-area">
-    <div class="logo-box">&#128142;</div>
-    <div class="brand-name">SpendWise</div>
-    <div class="brand-tag">Smart Money Manager</div>
+  <div class="logo">
+    <div class="logo-box">SW</div>
+    <div class="brand">SpendWise</div>
+    <div class="tag">Smart Money Manager</div>
   </div>
   <div class="card">
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('login')"><span>Login</span></button>
-      <button class="tab" onclick="switchTab('signup')"><span>Sign Up</span></button>
+      <button class="tab active" onclick="switchTab('login')">Login</button>
+      <button class="tab" onclick="switchTab('signup')">Sign Up</button>
     </div>
-    <div class="section active" id="loginSec">
-      <div class="fgroup">
-        <label class="flabel">Username</label>
-        <input class="finput" type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username" autocapitalize="none">
-      </div>
-      <div class="fgroup">
-        <label class="flabel">Password</label>
-        <input class="finput" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
-      </div>
+    <div class="sec active" id="loginSec">
+      <div class="fg"><label class="fl">Username</label><input class="fi" type="text" id="loginUsername" placeholder="Enter your username" autocapitalize="none"></div>
+      <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="loginPassword" placeholder="Enter your password"></div>
       <button class="btn" id="loginBtn" onclick="handleLogin()">Login to SpendWise</button>
     </div>
-    <div class="section" id="signupSec">
-      <div class="fgroup">
-        <label class="flabel">Username</label>
-        <input class="finput" type="text" id="signupUsername" placeholder="Choose a username" autocapitalize="none">
-      </div>
-      <div class="fgroup">
-        <label class="flabel">Email (optional)</label>
-        <input class="finput" type="email" id="signupEmail" placeholder="your@email.com">
-      </div>
-      <div class="fgroup">
-        <label class="flabel">Password</label>
-        <input class="finput" type="password" id="signupPassword" placeholder="Min. 6 characters">
-      </div>
+    <div class="sec" id="signupSec">
+      <div class="fg"><label class="fl">Username</label><input class="fi" type="text" id="signupUsername" placeholder="Choose a username" autocapitalize="none"></div>
+      <div class="fg"><label class="fl">Email (optional)</label><input class="fi" type="email" id="signupEmail" placeholder="your@email.com"></div>
+      <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="signupPassword" placeholder="Min. 6 characters"></div>
       <button class="btn" id="signupBtn" onclick="handleSignup()">Create My Account</button>
     </div>
   </div>
   <div class="feats">
-    <div class="feat"><div class="feat-ico">&#128202;</div><div class="feat-txt">Charts</div></div>
-    <div class="feat"><div class="feat-ico">&#127919;</div><div class="feat-txt">Budgets</div></div>
-    <div class="feat"><div class="feat-ico">&#128276;</div><div class="feat-txt">Alerts</div></div>
-    <div class="feat"><div class="feat-ico">&#9889;</div><div class="feat-txt">Instant</div></div>
+    <div class="feat"><div style="font-size:20px">📊</div><div class="fi-txt">Charts</div></div>
+    <div class="feat"><div style="font-size:20px">🎯</div><div class="fi-txt">Budgets</div></div>
+    <div class="feat"><div style="font-size:20px">🔔</div><div class="fi-txt">Alerts</div></div>
+    <div class="feat"><div style="font-size:20px">⚡</div><div class="fi-txt">Fast</div></div>
   </div>
 </div>
 <script>
-const API = 'https://spend-wise-wls7.onrender.com';
-
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-let W, H, particles = [];
-function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
-resize(); window.addEventListener('resize', resize);
-const COLORS = ['#7c3aed','#f72585','#4cc9f0','#10b981','#fbbf24'];
-class P {
-  constructor(){this.reset();}
-  reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.4;this.vy=(Math.random()-.5)*.4;this.r=Math.random()*1.8+.5;this.c=COLORS[Math.floor(Math.random()*COLORS.length)];this.o=Math.random()*.5+.2;}
-  update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1;}
-  draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=this.c;ctx.globalAlpha=this.o;ctx.fill();ctx.globalAlpha=1;}
-}
-for(let i=0;i<100;i++) particles.push(new P());
-function animate(){
-  ctx.fillStyle='rgba(5,5,15,.2)';ctx.fillRect(0,0,W,H);
-  particles.forEach(p=>{p.update();p.draw();});
-  for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++){
-    const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);
-    if(d<90){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=particles[i].c;ctx.globalAlpha=(1-d/90)*.12;ctx.lineWidth=.5;ctx.stroke();ctx.globalAlpha=1;}
-  }
-  requestAnimationFrame(animate);
-}
-animate();
-
-function switchTab(t){
-  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',(i===0)===(t==='login')));
-  document.getElementById('loginSec').classList.toggle('active',t==='login');
-  document.getElementById('signupSec').classList.toggle('active',t==='signup');
-}
-
-function showToast(msg, type='success'){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast '+type+' show';
-  setTimeout(()=>t.classList.remove('show'),3500);
-}
-
-async function handleLogin(){
-  const btn=document.getElementById('loginBtn');
-  const username=document.getElementById('loginUsername').value.trim();
-  const password=document.getElementById('loginPassword').value;
-  if(!username||!password){showToast('Please fill in all fields.','error');return;}
-  btn.disabled=true;btn.textContent='Logging in...';
-  try{
-    const res=await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
-    const data=await res.json();
-    if(res.ok){
-      localStorage.setItem('token',data.token);
-      localStorage.setItem('user_id',data.user_id);
-      localStorage.setItem('username',data.username);
-      showToast('Welcome back '+data.username+'!');
-      setTimeout(()=>window.location.href='dashboard.html',900);
-    }else showToast(data.message||'Login failed.','error');
-  }catch(e){showToast('Cannot connect to server.','error');}
-  btn.disabled=false;btn.textContent='Login to SpendWise';
-}
-
-async function handleSignup(){
-  const btn=document.getElementById('signupBtn');
-  const username=document.getElementById('signupUsername').value.trim();
-  const email=document.getElementById('signupEmail').value.trim();
-  const password=document.getElementById('signupPassword').value;
-  if(!username||!password){showToast('Username and password required.','error');return;}
-  btn.disabled=true;btn.textContent='Creating account...';
-  try{
-    const res=await fetch(API+'/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password})});
-    const data=await res.json();
-    if(res.ok){showToast('Account created! Please log in.');setTimeout(()=>switchTab('login'),1200);}
-    else showToast(data.message||'Signup failed.','error');
-  }catch(e){showToast('Cannot connect to server.','error');}
-  btn.disabled=false;btn.textContent='Create My Account';
-}
-
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'){
-    if(document.getElementById('loginSec').classList.contains('active'))handleLogin();
-    else handleSignup();
-  }
-});
-
-if(localStorage.getItem('token')) window.location.href='dashboard.html';
+const API='https://spend-wise-wls7.onrender.com';
+function switchTab(t){document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',(i===0)===(t==='login')));document.getElementById('loginSec').classList.toggle('active',t==='login');document.getElementById('signupSec').classList.toggle('active',t==='signup');}
+function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.classList.remove('show'),3000);}
+async function handleLogin(){const btn=document.getElementById('loginBtn');const u=document.getElementById('loginUsername').value.trim();const p=document.getElementById('loginPassword').value;if(!u||!p){showToast('Fill all fields','error');return;}btn.disabled=true;btn.textContent='Logging in...';try{const r=await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});const d=await r.json();if(r.ok){localStorage.setItem('token',d.token);localStorage.setItem('user_id',d.user_id);localStorage.setItem('username',d.username);showToast('Welcome '+d.username+'!');setTimeout(()=>window.location.href='dashboard.html',800);}else showToast(d.message||'Login failed','error');}catch(e){showToast('Cannot connect to server','error');}btn.disabled=false;btn.textContent='Login to SpendWise';}
+async function handleSignup(){const btn=document.getElementById('signupBtn');const u=document.getElementById('signupUsername').value.trim();const e=document.getElementById('signupEmail').value.trim();const p=document.getElementById('signupPassword').value;if(!u||!p){showToast('Fill all fields','error');return;}btn.disabled=true;btn.textContent='Creating...';try{const r=await fetch(API+'/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,email:e,password:p})});const d=await r.json();if(r.ok){showToast('Account created! Login now');setTimeout(()=>switchTab('login'),1000);}else showToast(d.message||'Failed','error');}catch(e){showToast('Cannot connect to server','error');}btn.disabled=false;btn.textContent='Create My Account';}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(document.getElementById('loginSec').classList.contains('active'))handleLogin();else handleSignup();}});
+if(localStorage.getItem('token'))window.location.href='dashboard.html';
 </script>
 </body>
 </html>
