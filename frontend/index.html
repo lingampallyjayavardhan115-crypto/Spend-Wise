@@ -2,401 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpendWise â€“ Smart Money Manager</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#05050f">
+  <title>SpendWise - Smart Money Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    :root{
-      --p1:#7c3aed;--p2:#6d28d9;--a1:#f72585;--a2:#b5179e;
-      --c1:#4cc9f0;--c2:#4361ee;--g:#10b981;
-    }
-    body{
-      font-family:'Inter',sans-serif;
-      min-height:100vh;
-      background:#05050f;
-      display:flex;align-items:center;justify-content:center;
-      overflow:hidden;position:relative;
-    }
-
-    /* â”€â”€ 3-D CANVAS BACKGROUND â”€â”€ */
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    body{font-family:'Inter',sans-serif;min-height:100vh;background:#05050f;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
     #bgCanvas{position:fixed;inset:0;z-index:0;}
-
-    /* â”€â”€ FLOATING COINS â”€â”€ */
-    .coin{
-      position:fixed;pointer-events:none;z-index:1;
-      font-size:22px;opacity:0;
-      animation:coinFloat linear infinite;
-    }
-    @keyframes coinFloat{
-      0%{transform:translateY(110vh) rotate(0deg);opacity:0;}
-      10%{opacity:.7;}
-      90%{opacity:.5;}
-      100%{transform:translateY(-10vh) rotate(720deg);opacity:0;}
-    }
-
-    /* â”€â”€ MAIN CARD â”€â”€ */
-    .wrap{
-      position:relative;z-index:10;
-      width:100%;max-width:460px;padding:20px;
-    }
-
-    /* â”€â”€ LOGO â”€â”€ */
-    .logo-area{text-align:center;margin-bottom:30px;}
-    .logo-3d{
-      display:inline-block;
-      width:90px;height:90px;
-      position:relative;margin-bottom:14px;
-      animation:logoSpin 6s ease-in-out infinite;
-      transform-style:preserve-3d;
-    }
-    @keyframes logoSpin{
-      0%,100%{transform:rotateY(0deg) rotateX(5deg);}
-      25%{transform:rotateY(15deg) rotateX(10deg);}
-      75%{transform:rotateY(-15deg) rotateX(-5deg);}
-    }
-    .logo-hex{
-      width:90px;height:90px;
-      background:linear-gradient(135deg,#7c3aed,#f72585,#4cc9f0);
-      clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-      display:flex;align-items:center;justify-content:center;
-      font-size:38px;
-      box-shadow:0 0 40px rgba(124,58,237,.8),0 0 80px rgba(247,37,133,.4);
-      animation:glowPulse 2s ease-in-out infinite;
-    }
-    @keyframes glowPulse{
-      0%,100%{box-shadow:0 0 40px rgba(124,58,237,.8),0 0 80px rgba(247,37,133,.4);}
-      50%{box-shadow:0 0 60px rgba(124,58,237,1),0 0 120px rgba(247,37,133,.7),0 0 160px rgba(76,201,240,.3);}
-    }
-    .logo-ring{
-      position:absolute;inset:-8px;
-      border-radius:50%;
-      border:2px solid transparent;
-      background:linear-gradient(#05050f,#05050f) padding-box,
-                 linear-gradient(135deg,#7c3aed,#f72585,#4cc9f0,#7c3aed) border-box;
-      animation:ringRotate 3s linear infinite;
-    }
-    @keyframes ringRotate{to{transform:rotate(360deg);}}
-    .logo-ring2{
-      position:absolute;inset:-16px;
-      border-radius:50%;
-      border:1px solid rgba(76,201,240,.3);
-      animation:ringRotate 6s linear infinite reverse;
-    }
-    .brand-name{
-      font-size:34px;font-weight:900;letter-spacing:-1px;
-      background:linear-gradient(135deg,#fff 0%,#c084fc 40%,#f72585 70%,#4cc9f0 100%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-      animation:shimmer 3s linear infinite;
-      background-size:200% auto;
-    }
-    @keyframes shimmer{to{background-position:200% center;}}
-    .brand-tag{
-      color:#6b7280;font-size:13px;font-weight:500;margin-top:4px;letter-spacing:2px;text-transform:uppercase;
-    }
-
-    /* â”€â”€ GLASS CARD â”€â”€ */
-    .card{
-      background:rgba(255,255,255,.04);
-      backdrop-filter:blur(24px);
-      border:1px solid rgba(255,255,255,.09);
-      border-radius:28px;
-      padding:36px;
-      box-shadow:0 25px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08);
-      animation:cardIn .6s cubic-bezier(.34,1.56,.64,1);
-    }
-    @keyframes cardIn{
-      from{opacity:0;transform:translateY(40px) scale(.95);}
-      to{opacity:1;transform:translateY(0) scale(1);}
-    }
-
-    /* â”€â”€ TABS â”€â”€ */
-    .tabs{
-      display:flex;background:rgba(255,255,255,.05);
-      border-radius:14px;padding:4px;margin-bottom:28px;gap:4px;
-    }
-    .tab{
-      flex:1;padding:11px;border:none;background:transparent;
-      color:#6b7280;font-size:14px;font-weight:700;cursor:pointer;
-      border-radius:11px;transition:all .3s;font-family:'Inter',sans-serif;
-      position:relative;overflow:hidden;
-    }
-    .tab::before{
-      content:'';position:absolute;inset:0;
-      background:linear-gradient(135deg,#7c3aed,#f72585);
-      opacity:0;transition:opacity .3s;border-radius:11px;
-    }
-    .tab.active::before{opacity:1;}
-    .tab.active{color:#fff;box-shadow:0 4px 20px rgba(124,58,237,.5);}
-    .tab span{position:relative;z-index:1;}
-
-    /* â”€â”€ FORM â”€â”€ */
-    .section{display:none;animation:fadeIn .3s ease;}
-    .section.active{display:block;}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-
-    .fgroup{margin-bottom:18px;}
-    .flabel{
-      display:block;font-size:11px;font-weight:700;color:#8b5cf6;
-      letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;
-    }
-    .finput-wrap{position:relative;}
-    .ficon{
-      position:absolute;left:14px;top:50%;transform:translateY(-50%);
-      font-size:16px;pointer-events:none;z-index:1;
-    }
-    .finput{
-      width:100%;padding:13px 14px 13px 44px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      border-radius:14px;color:#fff;font-size:15px;
-      font-family:'Inter',sans-serif;outline:none;transition:all .25s;
-    }
+    .wrap{position:relative;z-index:10;width:100%;max-width:440px;padding:16px;}
+    .logo-area{text-align:center;margin-bottom:24px;}
+    .logo-box{display:inline-flex;width:80px;height:80px;background:linear-gradient(135deg,#7c3aed,#f72585,#4cc9f0);border-radius:20px;align-items:center;justify-content:center;margin-bottom:12px;font-size:36px;box-shadow:0 0 40px rgba(124,58,237,.8);animation:glowPulse 2s ease-in-out infinite;}
+    @keyframes glowPulse{0%,100%{box-shadow:0 0 40px rgba(124,58,237,.8);}50%{box-shadow:0 0 70px rgba(247,37,133,.9);}}
+    .brand-name{font-size:32px;font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,#fff 0%,#c084fc 40%,#f72585 70%,#4cc9f0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .brand-tag{color:#6b7280;font-size:12px;font-weight:600;margin-top:6px;letter-spacing:3px;text-transform:uppercase;}
+    .card{background:rgba(255,255,255,.05);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:28px;box-shadow:0 25px 60px rgba(0,0,0,.5);}
+    .tabs{display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:24px;gap:4px;}
+    .tab{flex:1;padding:11px;border:none;background:transparent;color:#6b7280;font-size:14px;font-weight:700;cursor:pointer;border-radius:10px;transition:all .3s;font-family:'Inter',sans-serif;position:relative;overflow:hidden;}
+    .tab::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#7c3aed,#f72585);opacity:0;transition:opacity .3s;border-radius:10px;}
+    .tab.active::before{opacity:1;}.tab.active{color:#fff;}.tab span{position:relative;z-index:1;}
+    .section{display:none;}.section.active{display:block;}
+    .fgroup{margin-bottom:16px;}
+    .flabel{display:block;font-size:11px;font-weight:700;color:#8b5cf6;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+    .finput{width:100%;padding:13px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;font-size:16px;font-family:'Inter',sans-serif;outline:none;transition:all .25s;-webkit-appearance:none;}
     .finput::placeholder{color:#4b5563;}
-    .finput:focus{
-      border-color:#7c3aed;
-      background:rgba(124,58,237,.12);
-      box-shadow:0 0 0 3px rgba(124,58,237,.2),0 0 20px rgba(124,58,237,.1);
-      transform:translateY(-1px);
-    }
-
-    /* â”€â”€ BUTTON â”€â”€ */
-    .btn{
-      width:100%;padding:15px;border:none;border-radius:14px;
-      color:#fff;font-size:15px;font-weight:800;cursor:pointer;
-      position:relative;overflow:hidden;font-family:'Inter',sans-serif;
-      background:linear-gradient(135deg,#7c3aed,#f72585,#4cc9f0);
-      background-size:200% auto;
-      animation:btnShimmer 3s linear infinite;
-      transition:transform .2s,box-shadow .2s;
-      margin-top:6px;letter-spacing:.5px;
-    }
+    .finput:focus{border-color:#7c3aed;background:rgba(124,58,237,.12);box-shadow:0 0 0 3px rgba(124,58,237,.2);}
+    .btn{width:100%;padding:15px;border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;background:linear-gradient(135deg,#7c3aed,#f72585,#4cc9f0);background-size:200% auto;animation:btnShimmer 3s linear infinite;transition:transform .2s;margin-top:6px;touch-action:manipulation;}
     @keyframes btnShimmer{to{background-position:200% center;}}
-    .btn:hover{
-      transform:translateY(-3px) scale(1.02);
-      box-shadow:0 15px 40px rgba(124,58,237,.5);
-    }
-    .btn:active{transform:translateY(0) scale(.98);}
-    .btn:disabled{opacity:.5;cursor:not-allowed;animation:none;transform:none;}
-    .btn-ripple{
-      position:absolute;border-radius:50%;
-      background:rgba(255,255,255,.3);
-      transform:scale(0);animation:ripple .6s linear;
-      pointer-events:none;
-    }
-    @keyframes ripple{to{transform:scale(4);opacity:0;}}
-
-    /* â”€â”€ TOAST â”€â”€ */
-    .toast{
-      position:fixed;top:20px;right:20px;z-index:9999;
-      padding:14px 20px;border-radius:14px;
-      font-size:14px;font-weight:700;color:#fff;
-      transform:translateX(130%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-      display:flex;align-items:center;gap:10px;
-      box-shadow:0 10px 40px rgba(0,0,0,.4);
-      backdrop-filter:blur(10px);
-    }
-    .toast.show{transform:translateX(0);}
-    .toast.success{background:linear-gradient(135deg,rgba(16,185,129,.9),rgba(5,150,105,.9));border:1px solid rgba(16,185,129,.3);}
-    .toast.error{background:linear-gradient(135deg,rgba(239,68,68,.9),rgba(220,38,38,.9));border:1px solid rgba(239,68,68,.3);}
-
-    /* â”€â”€ FEATURES â”€â”€ */
-    .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px;}
-    .feat{
-      text-align:center;padding:14px 8px;
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:14px;cursor:default;
-      transition:all .3s;
-    }
-    .feat:hover{
-      background:rgba(124,58,237,.15);
-      border-color:rgba(124,58,237,.4);
-      transform:translateY(-4px) scale(1.05);
-    }
-    .feat-ico{font-size:22px;margin-bottom:6px;}
+    .btn:active{transform:scale(.97);}
+    .btn:disabled{opacity:.5;cursor:not-allowed;animation:none;}
+    .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:9999;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:700;color:#fff;transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 40px rgba(0,0,0,.4);max-width:90vw;text-align:center;}
+    .toast.show{transform:translateX(-50%) translateY(0);}
+    .toast.success{background:linear-gradient(135deg,#10b981,#059669);}
+    .toast.error{background:linear-gradient(135deg,#ef4444,#dc2626);}
+    .feats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px;}
+    .feat{text-align:center;padding:12px 6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;}
+    .feat-ico{font-size:20px;margin-bottom:4px;}
     .feat-txt{color:#6b7280;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
-
-    /* â”€â”€ DIVIDER â”€â”€ */
-    .divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
-    .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08);}
-    .divider span{color:#4b5563;font-size:12px;}
   </style>
 </head>
 <body>
 <canvas id="bgCanvas"></canvas>
 <div class="toast" id="toast"></div>
-
 <div class="wrap">
   <div class="logo-area">
-    <div class="logo-3d">
-      <div class="logo-hex">ðŸ’Ž</div>
-      <div class="logo-ring"></div>
-      <div class="logo-ring2"></div>
-    </div>
+    <div class="logo-box">&#128142;</div>
     <div class="brand-name">SpendWise</div>
-    <div class="brand-tag">âœ¦ Smart Money Manager âœ¦</div>
+    <div class="brand-tag">Smart Money Manager</div>
   </div>
-
   <div class="card">
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('login')"><span>ðŸ”‘ Login</span></button>
-      <button class="tab" onclick="switchTab('signup')"><span>ðŸš€ Sign Up</span></button>
+      <button class="tab active" onclick="switchTab('login')"><span>Login</span></button>
+      <button class="tab" onclick="switchTab('signup')"><span>Sign Up</span></button>
     </div>
-
     <div class="section active" id="loginSec">
       <div class="fgroup">
         <label class="flabel">Username</label>
-        <div class="finput-wrap">
-          <span class="ficon">ðŸ‘¤</span>
-          <input class="finput" type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username">
-        </div>
+        <input class="finput" type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username" autocapitalize="none">
       </div>
       <div class="fgroup">
         <label class="flabel">Password</label>
-        <div class="finput-wrap">
-          <span class="ficon">ðŸ”’</span>
-          <input class="finput" type="password" id="loginPassword" placeholder="Enter your password">
-        </div>
+        <input class="finput" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
       </div>
-      <button class="btn" id="loginBtn" onclick="handleLogin(event)">Login to SpendWise â†’</button>
+      <button class="btn" id="loginBtn" onclick="handleLogin()">Login to SpendWise</button>
     </div>
-
     <div class="section" id="signupSec">
       <div class="fgroup">
         <label class="flabel">Username</label>
-        <div class="finput-wrap">
-          <span class="ficon">ðŸ‘¤</span>
-          <input class="finput" type="text" id="signupUsername" placeholder="Choose a username">
-        </div>
+        <input class="finput" type="text" id="signupUsername" placeholder="Choose a username" autocapitalize="none">
       </div>
       <div class="fgroup">
         <label class="flabel">Email (optional)</label>
-        <div class="finput-wrap">
-          <span class="ficon">ðŸ“§</span>
-          <input class="finput" type="email" id="signupEmail" placeholder="your@email.com">
-        </div>
+        <input class="finput" type="email" id="signupEmail" placeholder="your@email.com">
       </div>
       <div class="fgroup">
         <label class="flabel">Password</label>
-        <div class="finput-wrap">
-          <span class="ficon">ðŸ”’</span>
-          <input class="finput" type="password" id="signupPassword" placeholder="Min. 6 characters">
-        </div>
+        <input class="finput" type="password" id="signupPassword" placeholder="Min. 6 characters">
       </div>
-      <button class="btn" id="signupBtn" onclick="handleSignup(event)">Create My Account â†’</button>
+      <button class="btn" id="signupBtn" onclick="handleSignup()">Create My Account</button>
     </div>
   </div>
-
   <div class="feats">
-    <div class="feat"><div class="feat-ico">ðŸ“Š</div><div class="feat-txt">Charts</div></div>
-    <div class="feat"><div class="feat-ico">ðŸŽ¯</div><div class="feat-txt">Budgets</div></div>
-    <div class="feat"><div class="feat-ico">ðŸ””</div><div class="feat-txt">Alerts</div></div>
-    <div class="feat"><div class="feat-ico">âš¡</div><div class="feat-txt">Instant</div></div>
+    <div class="feat"><div class="feat-ico">&#128202;</div><div class="feat-txt">Charts</div></div>
+    <div class="feat"><div class="feat-ico">&#127919;</div><div class="feat-txt">Budgets</div></div>
+    <div class="feat"><div class="feat-ico">&#128276;</div><div class="feat-txt">Alerts</div></div>
+    <div class="feat"><div class="feat-ico">&#9889;</div><div class="feat-txt">Instant</div></div>
   </div>
 </div>
-
 <script>
-/* â”€â”€ 3D PARTICLE CANVAS â”€â”€ */
+const API = 'https://spend-wise-wls7.onrender.com';
+
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
-let W, H, particles = [], lines = [];
-
+let W, H, particles = [];
 function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
-resize(); window.addEventListener('resize',resize);
-
-const COLORS=['#7c3aed','#f72585','#4cc9f0','#10b981','#fbbf24','#6d28d9','#b5179e'];
-
-class Particle{
+resize(); window.addEventListener('resize', resize);
+const COLORS = ['#7c3aed','#f72585','#4cc9f0','#10b981','#fbbf24'];
+class P {
   constructor(){this.reset();}
-  reset(){
-    this.x=Math.random()*W; this.y=Math.random()*H;
-    this.z=Math.random()*800+200;
-    this.vx=(Math.random()-.5)*.4; this.vy=(Math.random()-.5)*.4;
-    this.vz=(Math.random()-.5)*2;
-    this.color=COLORS[Math.floor(Math.random()*COLORS.length)];
-    this.r=Math.random()*2+1;
-  }
-  update(){
-    this.x+=this.vx; this.y+=this.vy; this.z+=this.vz;
-    if(this.x<0||this.x>W||this.y<0||this.y>H||this.z<50||this.z>1000)this.reset();
-  }
-  draw(){
-    const scale=600/this.z;
-    const px=(this.x-W/2)*scale+W/2;
-    const py=(this.y-H/2)*scale+H/2;
-    const r=this.r*scale;
-    const a=Math.min(1,scale*.8);
-    ctx.beginPath();
-    ctx.arc(px,py,r,0,Math.PI*2);
-    ctx.fillStyle=this.color;
-    ctx.globalAlpha=a*.6;
-    ctx.fill();
-    // glow
-    ctx.shadowBlur=12; ctx.shadowColor=this.color;
-    ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.globalAlpha=1;
-    return {px,py,r,a};
-  }
+  reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.4;this.vy=(Math.random()-.5)*.4;this.r=Math.random()*1.8+.5;this.c=COLORS[Math.floor(Math.random()*COLORS.length)];this.o=Math.random()*.5+.2;}
+  update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1;}
+  draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=this.c;ctx.globalAlpha=this.o;ctx.fill();ctx.globalAlpha=1;}
 }
-
-for(let i=0;i<180;i++) particles.push(new Particle());
-
-let mouse={x:W/2,y:H/2};
-document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
-
-function drawConnections(){
-  const pts=particles.map(p=>{
-    const scale=600/p.z;
-    return{x:(p.x-W/2)*scale+W/2,y:(p.y-H/2)*scale+H/2,c:p.color,z:p.z};
-  });
-  for(let i=0;i<pts.length;i++){
-    for(let j=i+1;j<pts.length;j++){
-      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
-      const d=Math.sqrt(dx*dx+dy*dy);
-      if(d<100){
-        ctx.beginPath();
-        ctx.moveTo(pts[i].x,pts[i].y);
-        ctx.lineTo(pts[j].x,pts[j].y);
-        ctx.strokeStyle=pts[i].c;
-        ctx.globalAlpha=(1-d/100)*.15;
-        ctx.lineWidth=.5;
-        ctx.stroke();
-        ctx.globalAlpha=1;
-      }
-    }
+for(let i=0;i<100;i++) particles.push(new P());
+function animate(){
+  ctx.fillStyle='rgba(5,5,15,.2)';ctx.fillRect(0,0,W,H);
+  particles.forEach(p=>{p.update();p.draw();});
+  for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++){
+    const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<90){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=particles[i].c;ctx.globalAlpha=(1-d/90)*.12;ctx.lineWidth=.5;ctx.stroke();ctx.globalAlpha=1;}
   }
+  requestAnimationFrame(animate);
 }
-
-function animateCanvas(){
-  ctx.fillStyle='rgba(5,5,15,.15)';
-  ctx.fillRect(0,0,W,H);
-  drawConnections();
-  particles.forEach(p=>p.update());
-  particles.forEach(p=>p.draw());
-  requestAnimationFrame(animateCanvas);
-}
-animateCanvas();
-
-/* â”€â”€ FLOATING COINS â”€â”€ */
-const coinEmojis=['ðŸ’°','ðŸ’µ','ðŸ’Ž','ðŸª™','ðŸ’³','ðŸ“ˆ','ðŸ¦','ðŸ’¹'];
-function spawnCoin(){
-  const el=document.createElement('div');
-  el.className='coin';
-  el.textContent=coinEmojis[Math.floor(Math.random()*coinEmojis.length)];
-  el.style.left=Math.random()*100+'vw';
-  el.style.fontSize=(14+Math.random()*16)+'px';
-  el.style.animationDuration=(8+Math.random()*12)+'s';
-  el.style.animationDelay=(Math.random()*4)+'s';
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(),(20+Math.random()*5)*1000);
-}
-for(let i=0;i<14;i++) setTimeout(spawnCoin,i*400);
-setInterval(spawnCoin,2500);
-
-/* â”€â”€ APP LOGIC â”€â”€ */
-const API='http://127.0.0.1:5000';
+animate();
 
 function switchTab(t){
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',(i===0)===(t==='login')));
@@ -404,65 +122,53 @@ function switchTab(t){
   document.getElementById('signupSec').classList.toggle('active',t==='signup');
 }
 
-function showToast(msg,type='success'){
-  const el=document.getElementById('toast');
-  el.textContent=(type==='success'?'âœ… ':'âŒ ')+msg;
-  el.className=`toast ${type} show`;
-  setTimeout(()=>el.classList.remove('show'),3500);
+function showToast(msg, type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3500);
 }
 
-function addRipple(btn,e){
-  const r=document.createElement('span');
-  r.className='btn-ripple';
-  const rect=btn.getBoundingClientRect();
-  const size=Math.max(rect.width,rect.height);
-  r.style.cssText=`width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;`;
-  btn.appendChild(r);
-  setTimeout(()=>r.remove(),700);
-}
-
-async function handleLogin(e){
+async function handleLogin(){
   const btn=document.getElementById('loginBtn');
-  addRipple(btn,e);
   const username=document.getElementById('loginUsername').value.trim();
   const password=document.getElementById('loginPassword').value;
   if(!username||!password){showToast('Please fill in all fields.','error');return;}
-  btn.disabled=true; btn.textContent='Logging in...';
+  btn.disabled=true;btn.textContent='Logging in...';
   try{
-    const res=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
+    const res=await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
     const data=await res.json();
     if(res.ok){
       localStorage.setItem('token',data.token);
       localStorage.setItem('user_id',data.user_id);
       localStorage.setItem('username',data.username);
-      showToast('Welcome back, '+data.username+'! ðŸŽ‰');
+      showToast('Welcome back '+data.username+'!');
       setTimeout(()=>window.location.href='dashboard.html',900);
     }else showToast(data.message||'Login failed.','error');
-  }catch{showToast('Cannot connect to server. Is Flask running?','error');}
-  btn.disabled=false; btn.textContent='Login to SpendWise â†’';
+  }catch(e){showToast('Cannot connect to server.','error');}
+  btn.disabled=false;btn.textContent='Login to SpendWise';
 }
 
-async function handleSignup(e){
+async function handleSignup(){
   const btn=document.getElementById('signupBtn');
-  addRipple(btn,e);
   const username=document.getElementById('signupUsername').value.trim();
   const email=document.getElementById('signupEmail').value.trim();
   const password=document.getElementById('signupPassword').value;
   if(!username||!password){showToast('Username and password required.','error');return;}
-  btn.disabled=true; btn.textContent='Creating account...';
+  btn.disabled=true;btn.textContent='Creating account...';
   try{
-    const res=await fetch(`${API}/auth/signup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password})});
+    const res=await fetch(API+'/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password})});
     const data=await res.json();
-    if(res.ok){showToast('Account created! Please log in. ðŸŽŠ');setTimeout(()=>switchTab('login'),1200);}
+    if(res.ok){showToast('Account created! Please log in.');setTimeout(()=>switchTab('login'),1200);}
     else showToast(data.message||'Signup failed.','error');
-  }catch{showToast('Cannot connect to server.','error');}
-  btn.disabled=false; btn.textContent='Create My Account â†’';
+  }catch(e){showToast('Cannot connect to server.','error');}
+  btn.disabled=false;btn.textContent='Create My Account';
 }
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'){
-    if(document.getElementById('loginSec').classList.contains('active')) document.getElementById('loginBtn').click();
-    else document.getElementById('signupBtn').click();
+    if(document.getElementById('loginSec').classList.contains('active'))handleLogin();
+    else handleSignup();
   }
 });
 
@@ -470,8 +176,3 @@ if(localStorage.getItem('token')) window.location.href='dashboard.html';
 </script>
 </body>
 </html>
-
-
-
-
-
